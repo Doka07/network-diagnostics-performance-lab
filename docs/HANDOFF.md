@@ -7,9 +7,12 @@ Gemini's regression updates are complete. Codex independently ran the current su
 review approves implementation and regressions. Claude independently re-ran all 134 tests,
 verified lint/formatting, inspected the regression bodies, and closed code/test review
 with no blocking findings. Both independent reviews are complete.
-Remote CI and owner acceptance remain outstanding. The folder is not yet a Git repository
-and has no remote; remote CI needs repository setup and an authorized push to a selected
-destination. No later phase is opened by this update.
+The owner pushed the repository; the first CI run failed before tests because artifacts/
+in .gitignore also excluded diaglab/artifacts source modules. The corrected /artifacts/
+rule ignores only top-level inventory, and Ruff now explicitly recognizes diaglab as
+first-party. Include all three diaglab/artifacts Python files in the owner's next commit.
+Local lint/formatting and all 134 tests pass. Successful remote CI and owner acceptance
+remain pending. No later phase is opened by this update.
 
 Reviewers post status directly to ../ndpl-private/CLAUDE_PLAN_REVIEW.md and
 ../ndpl-private/GEMINI_PLAN_REVIEW.md respectively, latest verdict first with dated history

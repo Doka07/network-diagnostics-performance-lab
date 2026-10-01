@@ -20,5 +20,5 @@ results/*
 .vscode/
 *.pem
 *.key
-artifacts/
+/artifacts/
 ndpl-private/

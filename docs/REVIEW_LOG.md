@@ -9,8 +9,11 @@ blocking and seven nonblocking findings resolved, with no remaining blocking cod
 Claude subsequently re-ran the green 134-test suite, checked lint/formatting, and inspected
 the regression test bodies. His current canonical verdict closes code and test review
 with no remaining blocking finding. Both independent reviews are complete.
-Remote CI has not run: this folder is not yet a Git repository and has no remote.
-Project-owner acceptance has not been recorded. Phase 1 is not yet fully closed.
+The owner initialized and pushed the repository. The first remote CI run failed at lint:
+an unanchored artifacts/ ignore rule excluded diaglab/artifacts source files from the
+commit. Codex narrowed the rule to /artifacts/ and explicitly declared diaglab as a Ruff
+first-party package. The omitted sources must be included in the owner's next commit.
+Local checks still pass (134 tests); remote success and owner acceptance remain pending.
 
 ## Initial implementation checks (historical)
 
