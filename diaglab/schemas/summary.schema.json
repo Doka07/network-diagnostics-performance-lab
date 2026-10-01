@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Diaglab summary 1.0",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^r-[0-9a-f]{32}$"
+    },
+    "evidence_kind": {
+      "enum": [
+        "pilot",
+        "measured",
+        "synthetic"
+      ]
+    },
+    "status": {
+      "enum": [
+        "NO_DEGRADATION",
+        "SINGLE_HINT",
+        "MULTIPLE_CONTRIBUTORS",
+        "INCONCLUSIVE"
+      ]
+    },
+    "contributors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9_.-]+$"
+      },
+      "uniqueItems": true
+    },
+    "supporting_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "contradicting_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "confidence_rationale": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "data_quality_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9_.-]+$"
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "evidence_kind",
+    "status",
+    "contributors",
+    "supporting_evidence",
+    "contradicting_evidence",
+    "alternatives",
+    "limitations",
+    "confidence_rationale",
+    "data_quality_flags"
+  ],
+  "additionalProperties": false
+}

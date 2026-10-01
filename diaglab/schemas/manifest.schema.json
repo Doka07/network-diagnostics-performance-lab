@@ -1,0 +1,410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Diaglab manifest 1.0",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^r-[0-9a-f]{32}$"
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "evidence_kind": {
+      "enum": [
+        "pilot",
+        "measured",
+        "synthetic"
+      ]
+    },
+    "run_role": {
+      "enum": [
+        "warmup",
+        "pilot",
+        "evaluation",
+        "overhead"
+      ]
+    },
+    "state": {
+      "enum": [
+        "planned",
+        "running",
+        "completed",
+        "failed",
+        "interrupted"
+      ]
+    },
+    "created_at_utc": {
+      "type": "string",
+      "format": "utc-rfc3339"
+    },
+    "eligibility": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "accepted",
+            "rejected"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      },
+      "required": [
+        "status",
+        "reasons"
+      ],
+      "additionalProperties": false
+    },
+    "code_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "build_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "config_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "campaign_settings_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "scenario_profile_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "environment_reference": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?!.*:).+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected_collectors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "cadence_hz": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "timeout_s": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "name",
+          "required",
+          "cadence_hz",
+          "timeout_s"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "collector_coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "collector": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "expected_samples": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "actual_samples": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "missed_samples": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "required": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "collector",
+          "expected_samples",
+          "actual_samples",
+          "missed_samples",
+          "required"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "timestamp_utc": {
+            "type": "string",
+            "format": "utc-rfc3339"
+          },
+          "monotonic_ns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "name",
+          "timestamp_utc",
+          "monotonic_ns"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?!.*:).+$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "size_bytes",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "not_applicable",
+            "pending",
+            "verified",
+            "failed",
+            "unverifiable"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      },
+      "required": [
+        "status",
+        "reasons"
+      ],
+      "additionalProperties": false
+    },
+    "ground_truth_reference": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?!.*:).+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "agent_sessions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "session_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "host_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "campaign_id",
+          "session_id",
+          "host_id",
+          "version"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "clock_records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "offset_ns": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "uncertainty_ns": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "measured_at_utc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "utc-rfc3339"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "drift_ns_per_s": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "valid": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "method",
+          "offset_ns",
+          "uncertainty_ns",
+          "measured_at_utc",
+          "drift_ns_per_s",
+          "valid"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "public_field_policy": {
+      "const": "private_until_reviewed_export"
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "campaign_id",
+    "evidence_kind",
+    "run_role",
+    "state",
+    "created_at_utc",
+    "eligibility",
+    "code_sha256",
+    "build_version",
+    "config_sha256",
+    "campaign_settings_sha256",
+    "scenario_profile_sha256",
+    "environment_reference",
+    "expected_collectors",
+    "collector_coverage",
+    "events",
+    "artifacts",
+    "cleanup",
+    "ground_truth_reference",
+    "agent_sessions",
+    "clock_records",
+    "public_field_policy"
+  ],
+  "additionalProperties": false
+}

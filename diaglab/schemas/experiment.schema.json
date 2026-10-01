@@ -1,0 +1,451 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Diaglab experiment 1.0",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "evidence_kind": {
+      "enum": [
+        "pilot",
+        "measured",
+        "synthetic"
+      ]
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "format": "rfc1918-ipv4"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "interface": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        }
+      },
+      "required": [
+        "host",
+        "port",
+        "interface"
+      ],
+      "additionalProperties": false
+    },
+    "traffic": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "const": "iperf3"
+        },
+        "protocol": {
+          "const": "tcp"
+        },
+        "duration_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "streams": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "omit_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connect_timeout_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "finish_timeout_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "terminate_grace_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "tool",
+        "protocol",
+        "duration_s",
+        "streams",
+        "connect_timeout_s",
+        "finish_timeout_s",
+        "terminate_grace_s"
+      ],
+      "additionalProperties": false
+    },
+    "telemetry": {
+      "type": "object",
+      "properties": {
+        "collectors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9_.-]+$"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "cadence_hz": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "timeout_s": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "name",
+              "required",
+              "cadence_hz",
+              "timeout_s"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "windows": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "required": {
+              "type": "boolean"
+            },
+            "session_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "enabled",
+            "required"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "collectors"
+      ],
+      "additionalProperties": false
+    },
+    "safety": {
+      "type": "object",
+      "properties": {
+        "allowlist_interfaces": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          }
+        },
+        "allow_default_route": {
+          "type": "boolean",
+          "default": false
+        },
+        "dry_run": {
+          "type": "boolean",
+          "default": true
+        },
+        "approved_profile_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "allowlist_interfaces"
+      ],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "baseline"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "loss"
+            },
+            "loss_pct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "limit_packets": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "loss_pct",
+            "limit_packets"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "latency"
+            },
+            "delay_ms": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "jitter_ms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "limit_packets": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "delay_ms",
+            "jitter_ms",
+            "limit_packets"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "rate"
+            },
+            "rate_mbit": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "burst_bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "limit_bytes": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "rate_mbit",
+            "burst_bytes",
+            "limit_bytes"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "cpu"
+            },
+            "core_id": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "workers": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "duration_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "kind",
+            "core_id",
+            "workers",
+            "duration_s"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "mixed"
+            },
+            "loss_pct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "delay_ms": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "jitter_ms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "limit_packets": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "loss_pct",
+            "delay_ms",
+            "jitter_ms",
+            "limit_packets"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "analysis": {
+      "type": "object",
+      "properties": {
+        "ruleset_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        "ruleset_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "expected_campaign_settings_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "interval_window": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "full",
+                "steady"
+              ]
+            },
+            "start_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "end_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "thresholds": {
+          "type": "object",
+          "properties": {
+            "baseline_relative_range_max": {
+              "type": "number",
+              "minimum": 0
+            },
+            "mandatory_missing_fraction_max": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "clock_uncertainty_ns_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "throughput_disturbance_pct_max": {
+              "type": "number",
+              "minimum": 0
+            },
+            "diagnostic_cpu_pct_max": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "baseline_relative_range_max",
+            "mandatory_missing_fraction_max",
+            "clock_uncertainty_ns_max",
+            "throughput_disturbance_pct_max",
+            "diagnostic_cpu_pct_max"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ruleset_id",
+        "ruleset_sha256",
+        "expected_campaign_settings_sha256",
+        "interval_window",
+        "thresholds"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "evidence_kind",
+    "target",
+    "traffic",
+    "telemetry",
+    "safety",
+    "scenario"
+  ],
+  "additionalProperties": false
+}

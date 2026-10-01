@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+results/*
+!results/.gitkeep
+*.log
+
+# Local credentials, editor state, and machine inventory
+.env
+.env.*
+!.env.example
+.aws/
+.codex/
+.idea/
+.vscode/
+*.pem
+*.key
+artifacts/
+ndpl-private/

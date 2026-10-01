@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Diaglab metric 1.0",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^r-[0-9a-f]{32}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "agent_session_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence_kind": {
+      "enum": [
+        "pilot",
+        "measured",
+        "synthetic"
+      ]
+    },
+    "host_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "collector": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "collector_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "utc-rfc3339"
+    },
+    "monotonic_ns": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "scheduled_monotonic_ns": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "collection_start_monotonic_ns": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "collection_end_monotonic_ns": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "data_quality_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9_.-]+$"
+      },
+      "uniqueItems": true
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "scope": {
+            "enum": [
+              "host",
+              "interface",
+              "flow",
+              "process",
+              "core",
+              "queue",
+              "agent",
+              "scheduler"
+            ]
+          },
+          "tags": {
+            "type": "object",
+            "maxProperties": 32,
+            "propertyNames": {"maxLength": 128},
+            "additionalProperties": {
+              "maxLength": 256,
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "unavailability_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "unit",
+          "scope",
+          "tags"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "unavailability_reason"
+              ],
+              "properties": {
+                "unavailability_reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "unavailability_reason": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "evidence_kind",
+    "host_id",
+    "collector",
+    "collector_version",
+    "timestamp_utc",
+    "monotonic_ns",
+    "sequence",
+    "scheduled_monotonic_ns",
+    "collection_start_monotonic_ns",
+    "collection_end_monotonic_ns",
+    "data_quality_flags",
+    "metrics"
+  ],
+  "additionalProperties": false,
+  "anyOf": [
+    {
+      "required": [
+        "run_id"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^r-[0-9a-f]{32}$"
+        }
+      }
+    },
+    {
+      "required": [
+        "campaign_id",
+        "agent_session_id"
+      ],
+      "properties": {
+        "agent_session_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        }
+      }
+    }
+  ]
+}
