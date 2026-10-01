@@ -538,7 +538,13 @@ def test_tc_i_02_sigint_during_a_live_run_verifies_cleanup_and_marks_interrupted
     monkeypatch.setattr(Iperf3TrafficAdapter, "start", _start_then_self_interrupt)
 
     with pytest.raises(RunInterrupted):
-        run_experiment(config, tmp_path / "live", execute=True, run_role="pilot")
+        run_experiment(
+            config,
+            tmp_path / "live",
+            execute=True,
+            run_role="pilot",
+            executable=str(mock_executable),
+        )
 
     manifest = json.loads((tmp_path / "live" / "manifest.json").read_text())
     assert manifest["state"] == "interrupted"

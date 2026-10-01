@@ -1,5 +1,16 @@
 # Implementation handoff
 
+## Current update — Phase 2 CI fixture fix ready
+
+GitHub Actions run 36913304350 failed on both Python versions with 197 passes and one
+failure: the SIGINT integration test omitted its fake executable argument, selecting
+system iperf3, which is absent on CI. Claude corrected the argument and audited every
+run_experiment test call; assertions and production code are unchanged.
+Codex verified the normal suite: 198 passed in 4.18s; lint/formatting and diff checks pass.
+Owner commit/push and a new successful remote CI run remain pending.
+
+## Previous local review status
+
 ## Current status — Phase 2 local code/test review complete
 
 Codex read Claude's final canonical update. Claude corrected the regression's executable

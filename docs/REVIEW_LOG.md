@@ -1,5 +1,12 @@
 # Review log
 
+## Phase 2 CI fixture correction
+
+Run 36913304350 failed identically on Python 3.12/3.14 because the SIGINT test selected
+an absent system iperf3 instead of its fixture. Claude fixed executable selection and
+audited all runner calls, preserving assertions. Codex reran the normal suite: 198 passed;
+lint and formatting pass. A fresh remote CI run is required after the owner's push.
+
 ## Phase 2 final local review verified
 
 Claude corrected his regression's mock executable argument and removed its stale xfail
