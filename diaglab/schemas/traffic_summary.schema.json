@@ -1,0 +1,376 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "sender": {
+          "$ref": "#/$defs/endpoint"
+        },
+        "receiver": {
+          "$ref": "#/$defs/endpoint"
+        },
+        "flows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/flow"
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "intervals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interval"
+          },
+          "minItems": 1,
+          "maxItems": 100000
+        },
+        "sender_retransmits": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "endpoint_byte_residual": {
+          "type": "integer"
+        },
+        "quality_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "uniqueItems": true,
+          "maxItems": 64
+        },
+        "receiver_source": {
+          "enum": [
+            "client",
+            "embedded_server",
+            "independent_server"
+          ]
+        }
+      },
+      "required": [
+        "sender",
+        "receiver",
+        "flows",
+        "intervals",
+        "sender_retransmits",
+        "endpoint_byte_residual",
+        "quality_flags",
+        "receiver_source"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "report"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Diaglab traffic summary 1.0",
+  "$defs": {
+    "endpoint": {
+      "type": "object",
+      "properties": {
+        "bytes_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "start_s": {
+          "type": "number"
+        },
+        "end_s": {
+          "type": "number"
+        },
+        "duration_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "computed_bps": {
+          "type": "number",
+          "minimum": 0
+        },
+        "reported_bps": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reported_seconds": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "enum": [
+            "client",
+            "embedded_server",
+            "independent_server"
+          ]
+        },
+        "quality_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "uniqueItems": true,
+          "maxItems": 64
+        }
+      },
+      "required": [
+        "bytes_count",
+        "start_s",
+        "end_s",
+        "duration_s",
+        "computed_bps",
+        "reported_bps",
+        "reported_seconds",
+        "source",
+        "quality_flags"
+      ],
+      "additionalProperties": false
+    },
+    "flow": {
+      "type": "object",
+      "properties": {
+        "socket_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "local_host": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "remote_host": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "local_port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "remote_port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "sender": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/endpoint"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receiver": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/endpoint"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retransmits": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mean_rtt_us": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "min_rtt_us": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "max_rtt_us": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rtt_unavailability_reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "socket_id",
+        "local_host",
+        "remote_host",
+        "local_port",
+        "remote_port",
+        "sender",
+        "receiver",
+        "retransmits",
+        "mean_rtt_us",
+        "min_rtt_us",
+        "max_rtt_us",
+        "rtt_unavailability_reason"
+      ],
+      "additionalProperties": false
+    },
+    "interval": {
+      "type": "object",
+      "properties": {
+        "start_s": {
+          "type": "number"
+        },
+        "end_s": {
+          "type": "number"
+        },
+        "duration_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "socket_id": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "direction": {
+          "enum": [
+            "sent",
+            "received"
+          ]
+        },
+        "bytes_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "computed_bps": {
+          "type": "number",
+          "minimum": 0
+        },
+        "reported_bps": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "omitted": {
+          "type": "boolean"
+        },
+        "rtt_us": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rttvar_us": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "enum": [
+            "client",
+            "embedded_server",
+            "independent_server"
+          ]
+        }
+      },
+      "required": [
+        "start_s",
+        "end_s",
+        "duration_s",
+        "socket_id",
+        "direction",
+        "bytes_count",
+        "computed_bps",
+        "reported_bps",
+        "omitted",
+        "rtt_us",
+        "rttvar_us",
+        "source"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

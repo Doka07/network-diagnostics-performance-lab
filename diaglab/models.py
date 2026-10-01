@@ -105,6 +105,9 @@ class PreflightResult:
 class VerificationResult:
     verified: bool
     reasons: tuple[str, ...] = ()
+    state: str | None = None
+    transfer_completed: bool = False
+    result_verified: bool = False
 
 
 @dataclass(frozen=True)
@@ -120,6 +123,9 @@ class TrafficResult:
     stdout_artifact: str
     stderr_artifact: str
     timed_out: bool = False
+    timeout_stage: str | None = None
+    cleanup_verified: bool = False
+    failure_reason: str | None = None
 
 
 @dataclass(frozen=True)

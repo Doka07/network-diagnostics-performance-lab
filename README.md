@@ -6,9 +6,10 @@ diagnostics. The controller is Ubuntu; the receiver is a Windows mini-PC on the 
 The project compares workload, TCP, queue, NIC, and CPU observations to distinguish
 possible causes of lower throughput. It will also measure its own collection overhead.
 
-Current stage: Phase 1 code and tests cleared by both reviewers, with 134 tests passing;
-remote CI and owner acceptance pending.
-No throughput results or validated diagnoses are available yet.
+Current stage: Phase 1 accepted; Phase 2 baseline runner and parser implemented for
+independent tests and code review. Phase 1 CI passed on Python 3.12/3.14. A private manual
+readiness transfer was verified; no retained performance campaign or validated diagnosis
+is available yet.
 
 ## Getting started
 
@@ -25,8 +26,16 @@ python3 -m venv .venv
 Manifest creation refuses a nonempty output directory. The manifest records a planned
 run with empty observations and pending eligibility; it is not a measurement.
 
-Only configuration validation and planned manifest creation are implemented. Traffic,
-collectors, fault application, diagnosis, and reporting remain later phases.
+Phase 2 also supports offline planning and integrity verification:
+
+```bash
+.venv/bin/diaglab run --config configs/baseline.yaml --output /tmp/diaglab-run-plan
+.venv/bin/diaglab verify --run /tmp/diaglab-run-plan
+```
+
+Live baseline traffic requires explicit `--execute`, an approved pilot configuration and
+a persistent manually started receiver. See the runbook before execution. Collectors,
+fault application, diagnosis and reporting remain later phases.
 
 ## Data and review
 

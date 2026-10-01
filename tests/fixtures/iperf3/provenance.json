@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "role": "captured_regression",
+  "usage": "Independent unit and regression testing only; strictly prohibited from empirical performance claims",
+  "fixtures": [
+    {
+      "name": "single_stream_success_client.json",
+      "source_origin": "ndpl-private/artifacts/phase0/manual-22e6e921fc594eb8b9c94e5cbadeff21/client.json",
+      "source_build": "Ubuntu 24.04 LTS x86_64, iperf 3.16",
+      "original_sha256": "ef2acd9f314da3ed07806455a3388a1d1c6df90215e1b69fadb8508325bb9849",
+      "scrubbed_sha256": "5e781624836cf77a78c64d1a2ecf86343d4fe4528377af074a84b6c5d770181f",
+      "transforms": [
+        "Replaced private IP 10.0.0.22 with RFC 5737 documentation IP 192.0.2.10",
+        "Replaced private IP 10.0.0.23 with RFC 5737 documentation IP 192.0.2.20",
+        "Scrubbed local hostname and kernel release banner",
+        "Scrubbed raw TCP cookie token",
+        "Preserved numeric byte counts, durations, intervals, RTTs, and misleading sender: true flag verbatim",
+        "Scrubbed embedded server_output_json consistently"
+      ]
+    },
+    {
+      "name": "single_stream_success_server.json",
+      "source_origin": "ndpl-private/artifacts/phase0/manual-22e6e921fc594eb8b9c94e5cbadeff21/server.json",
+      "source_build": "Windows 11 Cygwin x86_64, iperf 3.21",
+      "original_sha256": "adb1c1873d0485416d821ac3b0f1d5fe5e552c56944f2e09464f8fb1a0b076a4",
+      "scrubbed_sha256": "9d03a54166c21055960d922a1892ce2172866ccdda1f44de062b55603acc387c",
+      "transforms": [
+        "Replaced private IP 10.0.0.23 with RFC 5737 documentation IP 192.0.2.20",
+        "Replaced private IP 10.0.0.22 with RFC 5737 documentation IP 192.0.2.10",
+        "Scrubbed local hostname and Cygwin release banner",
+        "Scrubbed raw TCP cookie token",
+        "Preserved all receiver intervals, bytes, rates, and duration verbatim"
+      ]
+    },
+    {
+      "name": "connection_timeout_client.json",
+      "source_origin": "ndpl-private/artifacts/phase0/manual-91ac1d7eab8d4d78a58d4ce9abb4e2e2/client.json",
+      "source_build": "Ubuntu 24.04 LTS x86_64, iperf 3.16",
+      "original_sha256": "b75d6edff3ab88e236fadb79bc9ff4e4a59607cf00103ade1894ebd9dd7d8d4c",
+      "scrubbed_sha256": "f1fa82aaa23431969f9f4d8fe3ca4178d0ee625392b38729ef06abba4f077bbc",
+      "transforms": [
+        "Scrubbed local hostname and kernel release banner",
+        "Preserved top-level error string indicating Connection timed out"
+      ]
+    }
+  ]
+}

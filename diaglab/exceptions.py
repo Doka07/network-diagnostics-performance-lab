@@ -33,6 +33,10 @@ class FaultCleanupError(DiaglabError):
 class TrafficExecutionError(DiaglabError):
     code = "TRAFFIC_FAILED"
 
+    def __init__(self, message: str, *, reason_code: str = "TRAFFIC_FAILED") -> None:
+        self.reason_code = reason_code
+        super().__init__(message)
+
 
 class TelemetryCollectionError(DiaglabError):
     code = "COLLECTION_FAILED"
@@ -40,3 +44,7 @@ class TelemetryCollectionError(DiaglabError):
 
 class ArtifactIntegrityError(DiaglabError):
     code = "ARTIFACT_INVALID"
+
+
+class NonfiniteValueError(ArtifactIntegrityError):
+    """A numeric JSON value cannot be represented as a finite number."""

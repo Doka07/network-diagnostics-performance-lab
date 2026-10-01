@@ -1,7 +1,10 @@
-# Phase 1 contracts
+# Command and data contracts
+
+Phase 2 APIs and CLI behavior are in [PHASE2_CONTRACTS.md](PHASE2_CONTRACTS.md).
+Implementation is available for independent testing and code review.
 
 The schemas in `diaglab/schemas/` are bundled package resources and the authoritative
-serialized field definitions. All four use JSON Schema draft 2020-12. Python validation
+serialized field definitions. All seven use JSON Schema draft 2020-12. Python validation
 additionally enforces finite JSON values, exact numeric types and semantic constraints.
 No schema reference requires network retrieval.
 
@@ -13,8 +16,9 @@ No schema reference requires network retrieval.
 | `diaglab manifest create --config PATH --output DIR [--run-role ROLE]` | Write only a new planned manifest in an absent/empty directory |
 | `python -m diaglab ...` | Same `diaglab.cli:main` entrypoint as the console script |
 
-Phase 2 implements `run` and `verify`. Phase 4 implements `recover`. Phase 6 implements
-`analyze`. These commands are deliberately absent in Phase 1.
+`run --config PATH --output DIR` plans offline; `--execute` explicitly selects live
+baseline pilot traffic. `verify --run DIR` checks artifacts offline. `recover` and
+`analyze` remain unimplemented.
 
 | Exit | Meaning |
 |---|---|
@@ -24,8 +28,14 @@ Phase 2 implements `run` and `verify`. Phase 4 implements `recover`. Phase 6 imp
 | 3 | Execution/data-integrity failure |
 | 4 | Cleanup failure, prioritized over the triggering failure in later lifecycles |
 | 130 | User interruption after successful cleanup |
+| 143 | SIGTERM interruption after successful cleanup |
 
 Errors go to stderr as `SYMBOLIC_CODE: explanation`. Argparse usage errors exit 2.
+Offline verify uses only exits 0, 2 and 3. Exit 0 can verify an intact failed run;
+inspect state, transfer_completed and result_verified separately.
+
+For Phase 2, approved_profile_id identifies the owner's approved baseline traffic setup;
+later fault phases use it for the approved fault profile. It is not authorization by itself.
 
 ## Configuration
 

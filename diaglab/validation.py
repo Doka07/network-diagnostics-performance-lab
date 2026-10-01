@@ -51,7 +51,15 @@ StrictValidator = validators.extend(Draft202012Validator, type_checker=TYPES)
 
 @lru_cache(maxsize=8)
 def validator(name: str) -> Draft202012Validator:
-    if name not in {"experiment", "metric", "manifest", "summary"}:
+    if name not in {
+        "experiment",
+        "metric",
+        "manifest",
+        "summary",
+        "traffic_summary",
+        "checksums",
+        "run_command",
+    }:
         raise ArtifactIntegrityError(f"unknown schema: {name}")
     schema = parse_json(files("diaglab").joinpath("schemas", f"{name}.schema.json").read_text())
     StrictValidator.check_schema(schema)

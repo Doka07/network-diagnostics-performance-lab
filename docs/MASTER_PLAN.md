@@ -6,6 +6,10 @@ supporting evidence, contradicting evidence and uncertainty. Measure collection 
 
 ## Phases
 
+Product interface requirement: a polished Python desktop GUI inspired by Wireshark's
+inspection workflow. Proposed staged delivery is in [GUI_PLAN.md](GUI_PLAN.md), starting
+with an offline run browser after Phase 2 acceptance. GUI scope needs independent review.
+
 0. Inventory both hosts, confirm topology and perform an approved bounded manual transfer.
 1. Establish strict configuration/data contracts, offline CLI, manifests, interfaces and CI.
 2. Implement the traffic runner and one/four-stream baseline pilots.
@@ -18,10 +22,10 @@ E. Collect fresh held-out individual-scenario evaluation under the frozen settin
 8. Evaluate one mixed fault without claiming validated cause ranking.
 9. Review evidence, reproducibility, charts and public claims before publication.
 
-Phase 1 code and independent tests are cleared by both reviewers. Remote CI and owner
-acceptance remain pending. The manual transfer,
-Windows inventory completion, and subsequent phase gates remain pending. Offline work was
-authorized while host readiness is completed; this does not establish performance readiness.
+Phase 1 is accepted after independent reviews, passing tests, and successful remote CI.
+The authorized bounded manual transfer completed and cleanup was verified. Remaining
+host inventory, physical topology confirmation, and subsequent phase gates remain pending.
+This readiness sample does not establish a retained performance baseline.
 
 ## Evidence rules
 

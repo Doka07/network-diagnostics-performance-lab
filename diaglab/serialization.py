@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
-from diaglab.exceptions import ArtifactIntegrityError
+from diaglab.exceptions import ArtifactIntegrityError, NonfiniteValueError
 
 
 def require_json(value: Any, path: str = "$", seen: set[int] | None = None) -> None:
@@ -15,7 +15,7 @@ def require_json(value: Any, path: str = "$", seen: set[int] | None = None) -> N
         return
     if type(value) is float:
         if not math.isfinite(value):
-            raise ArtifactIntegrityError(f"{path}: nonfinite number")
+            raise NonfiniteValueError(f"{path}: nonfinite number")
         return
     if isinstance(value, Mapping) or isinstance(value, (list, tuple)):
         seen = set() if seen is None else seen
@@ -72,7 +72,7 @@ def _pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
 
 
 def _constant(value: str) -> None:
-    raise ArtifactIntegrityError(f"nonfinite JSON value: {value}")
+    raise NonfiniteValueError(f"nonfinite JSON value: {value}")
 
 
 def parse_json(text: str) -> Any:

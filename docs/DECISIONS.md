@@ -1,5 +1,38 @@
 # Decisions
 
+## 2026-10-01 — Desktop GUI requirement
+
+Denis requested a polished desktop interface inspired by Wireshark. Record it as a
+product requirement alongside the reusable Python backend and CLI. GUI_PLAN.md proposes
+the workspace and staged delivery. PySide6 is a candidate, not a finalized dependency;
+GUI implementation contracts and scope await review. Phase 2 review continues.
+
+## 2026-10-01 — Phase 2 implementation authorized
+
+Both independent reviewers approved PHASE2_CONTRACTS.md. Denis then explicitly instructed
+Codex to check both reviews and go ahead. This authorizes baseline runner/parser implementation
+and independent testing/review, not additional LAN traffic or later phases. The approved
+design requires a persistent manual receiver and a combined parent execution deadline.
+Commits and pushes remain owner-only. Phase 2 acceptance awaits implementation reviews.
+
+## 2026-10-01 — Manual readiness transfer
+
+The owner explicitly authorized one bounded 30-second single-stream Ubuntu-to-Windows
+transfer and its temporary peer/IP/interface-scoped firewall rule. Codex operated it
+over verified SSH. A connection-only attempt failed; the corrected attempt kept the
+server's SSH session alive and completed. Both attempts are preserved privately,
+successful endpoint results reconcile, and temporary process/firewall cleanup is verified.
+No configuration of NICs, qdiscs, TCP settings, routes or persistent firewall rules was
+changed. This is readiness evidence only; remaining inventory and subsequent phase gates
+still apply. Local documentation changes remain for the owner to commit.
+## 2026-10-01 — Phase 1 accepted
+
+The project owner explicitly accepted Phase 1 after both independent reviews and the
+successful Python 3.12/3.14 GitHub Actions run. Phase 1 is closed. The accepted tool is
+the offline CLI and contracts; live traffic, telemetry, faults, and analysis remain
+later deliverables. This acceptance does not authorize unspecified host changes or
+live fault injection. Commits and pushes remain the project owner's responsibility.
+
 ## 2026-10-01 — Initial implementation scope
 
 The project owner approved starting implementation after independent planning reviews.

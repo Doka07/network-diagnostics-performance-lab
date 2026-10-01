@@ -1,21 +1,27 @@
-"""Phase 1 CLI. Both console and module entrypoints call main()."""
+"""Offline planning/verification and explicitly selected baseline execution."""
 
 import argparse
 import json
 import logging
 import sys
 from collections.abc import Sequence
+from pathlib import Path
 
 from diaglab import __version__
 from diaglab.artifacts.manifest import create_run_manifest
+from diaglab.artifacts.store import ArtifactStore
 from diaglab.config import load_config
 from diaglab.exceptions import DiaglabError
+from diaglab.run import run_experiment, verify_run
+from diaglab.validation import parse_json
 
 LOGGER = logging.getLogger("diaglab")
 
 
 def parser() -> argparse.ArgumentParser:
-    root = argparse.ArgumentParser(prog="diaglab", description="Offline network lab planning tools")
+    root = argparse.ArgumentParser(
+        prog="diaglab", description="TCP lab planning and baseline tools"
+    )
     root.add_argument("--version", action="version", version=__version__)
     commands = root.add_subparsers(dest="command", required=True)
     config = commands.add_parser("config", help="validate experiment configuration")
@@ -31,14 +37,44 @@ def parser() -> argparse.ArgumentParser:
     create.add_argument(
         "--run-role", choices=("warmup", "pilot", "evaluation", "overhead"), default="pilot"
     )
+    run = commands.add_parser("run", help="plan offline; --execute selects live baseline traffic")
+    run.add_argument("--config", required=True)
+    run.add_argument("--output", required=True)
+    run.add_argument("--execute", action="store_true")
+    run.add_argument("--run-role", choices=("warmup", "pilot"), default="pilot")
+    verify = commands.add_parser("verify", help="offline artifact/checksum verification")
+    verify.add_argument("--run", required=True)
     return root
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
-        config = load_config(args.config)
-        if args.command == "config":
+        if args.command == "verify":
+            verification = verify_run(Path(args.run))
+            result = {
+                "verified": verification.verified,
+                "state": verification.state,
+                "transfer_completed": verification.transfer_completed,
+                "result_verified": verification.result_verified,
+                "reasons": list(verification.reasons),
+            }
+        elif args.command == "run":
+            config = load_config(args.config)
+            path = run_experiment(
+                config, Path(args.output), execute=args.execute, run_role=args.run_role
+            )
+            verification = verify_run(path.parent)
+            with ArtifactStore(path.parent) as store:
+                run_id = parse_json(store.read("manifest.json").decode("utf-8"))["run_id"]
+            result = {
+                "run_id": run_id,
+                "state": verification.state,
+                "manifest": str(path),
+                "result_verified": verification.result_verified,
+            }
+        elif args.command == "config":
+            config = load_config(args.config)
             result = {
                 "status": "valid",
                 "schema_version": "1.0",
@@ -46,6 +82,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "live_preflight_performed": False,
             }
         else:
+            config = load_config(args.config)
             path = create_run_manifest(config, args.output, run_role=args.run_role)
             result = {"status": "planned", "manifest": str(path)}
         print(json.dumps(result, allow_nan=False))
