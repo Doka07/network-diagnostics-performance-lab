@@ -1,5 +1,11 @@
 # Review log
 
+## 2026-10-02 — remote GUI CI environment correction
+
+Run 37048273621: core jobs passed, GUI collection failed because Qt could not load
+libEGL.so.1. Added the Ubuntu libegl1 runtime package to the GUI workflow. No test
+weakened or production code changed. New remote run required after owner commit/push.
+
 ## 2026-10-02 — combined release reviews closed
 
 Read Claude's closing APPROVED verdict and Gemini's final combined-release approval.

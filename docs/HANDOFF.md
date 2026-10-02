@@ -1,5 +1,16 @@
 # Implementation handoff
 
+## CI runtime dependency fix — 2026-10-02
+
+Inspected Actions run 37048273621 for commit 1423ce4. Both offline jobs passed.
+Both GUI logs show collection failing at PySide6.QtGui import with missing libEGL.so.1;
+the 3.14 job is marked cancelled by the matrix after the 3.12 failure. No GUI assertion
+ran. Local Ubuntu already provides this library from libegl1, explaining the local pass.
+Added apt installation of libegl1 to GUI jobs before Python dependencies/tests. Production
+and independent tests unchanged; NDPL_REQUIRE_GUI remains enabled. Verified local package
+ownership and Qt linkage and checked whitespace. Remote verification requires Denis to
+commit/push this workflow fix; rerunning the old commit cannot include it.
+
 ## Final review closure — 2026-10-02
 
 Read both canonical closing verdicts directly. Claude: CLOSED, APPROVED, PREVIEW-1
