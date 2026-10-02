@@ -4,12 +4,14 @@ Read docs/MASTER_PLAN.md, docs/CONTRACTS.md, docs/DECISIONS.md and docs/HANDOFF.
 Explicit project-owner instructions take precedence. Implement only the assigned phase.
 
 - Codex implements, performs development checks, runs independent tests, and fixes accepted issues.
-- Gemini authors committed independent tests and reviews methodology, arithmetic and charts.
-- Claude reviews architecture, code, safety, documentation and conclusions.
+- Claude authors committed independent tests and reviews architecture, code, safety,
+  documentation, methodology, arithmetic, chart fidelity and conclusions for all phases.
+- Gemini is the second independent methodology and GUI reviewer, including arithmetic,
+  chart fidelity and interpretation. Claude retains existing independent test ownership.
 - The project owner approves experiments, scope, datasets, merges and publication.
 
 Use separate branches/worktrees for concurrent changes. Do not edit the same file concurrently.
-Tests disputed by Codex go to Gemini first; Claude comments where useful;
+Tests disputed by Codex go to Claude first;
 unresolved disagreements go to the project owner.
 Never silently delete or weaken another agent's tests.
 
@@ -25,8 +27,12 @@ Status handoff locations (relative to this repository root):
 Reviewers put their latest phase, verdict, checks/results, blockers, and next action
 at the top of their own canonical file, retaining dated history below. Their final chat
 response can simply say which file was updated. The owner need only tell Codex
-"Check the review files"; Codex reads both directly and reconciles the status.
+"Check the review files"; Codex reads both reviewers' current status and reconciles it.
 Each agent owns its review file; Codex must not rewrite reviewer verdicts.
+Claude writes tests from the approved contracts before reading Codex's implementation.
+Keep test-authoring results and code-review findings separate in the canonical review.
+Gemini updates its existing canonical review; historical test assignments do not transfer
+Claude's current test ownership. Neither reviewer edits the other's files.
 
 Each handoff records files changed, checks and independent test results, assumptions,
 limitations, safety/methodology impact and open decisions. Local checks do not substitute

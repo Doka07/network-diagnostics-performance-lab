@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy"
+content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>DiagLab · saved-run results</title>
+<style>
+:root{color-scheme:light;font:16px system-ui,sans-serif;background:#edf2f6;color:#193047}
+body{max-width:1050px;margin:48px auto;padding:0 24px}header{margin-bottom:32px}
+h1{font-size:clamp(30px,5vw,48px);letter-spacing:-1px;margin:10px 0}h2{margin:0}
+.eyebrow{color:#006b63;font-weight:700;letter-spacing:2px}p,li{line-height:1.6}
+.notice{padding:14px 18px;background:#fff2d4;border-left:4px solid #a86a00;color:#654000}
+section{background:white;border:1px solid #c8d4df;border-radius:12px;padding:24px;margin:20px 0}
+.run-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.run-heading span,.flags{color:#4b6275}table{width:100%;border-collapse:collapse}
+th,td{padding:12px 0;border-bottom:1px solid #dce4eb;text-align:left}td{text-align:right}
+details{margin-top:18px}summary{cursor:pointer;color:#006b63}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}
+footer{margin:36px 0} @media print{body{margin:0;background:white}section{break-inside:avoid}}
+</style></head><body><aside class='notice'><strong>SYNTHETIC PREVIEW — NO LIVE MEASUREMENTS</strong><p>All values below come from fake-process development fixtures. The pilot labels reflect the fixture manifests, not hardware experiments. Do not use these numbers as performance evidence.</p></aside><header><div class="eyebrow">DIAGLAB / RESULTS</div>
+<h1>Saved-run evidence, summarized.</h1>
+<p>Offline report · captured snapshots · no cross-run statistical claims</p>
+<p class="notice"><strong>Draft for review.</strong> No performance claims accepted.
+Synthetic and pilot results are not retained benchmark evidence.</p></header>
+<section><div class='run-heading'><h2>Run 1</h2><span>pilot · pilot · pending</span></div><p>Integrity: <strong>verified</strong> · Traffic: completed · Traffic result verified: True</p><table><tbody><tr><th scope='row'>Receiver goodput</th><td>3246.915 Mbit/s</td></tr><tr><th scope='row'>Receiver bytes</th><td>2029321850 B</td></tr><tr><th scope='row'>Retained duration</th><td>5.000 s</td></tr><tr><th scope='row'>Sender retransmits</th><td>6</td></tr><tr><th scope='row'>Endpoint byte residual</th><td>1311760 B</td></tr></tbody></table><p class='flags'>No recorded flags</p><details><summary>Source digests and goodput evidence</summary><pre>{
+  &quot;source_digests&quot;: [
+    {
+      &quot;artifact&quot;: &quot;checksums.json&quot;,
+      &quot;size_bytes&quot;: 746,
+      &quot;sha256&quot;: &quot;4653ef7ce502c783e381ca973c5b76cebd2443b8249448b1daa465d74986df2e&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;client.json&quot;,
+      &quot;size_bytes&quot;: 15178,
+      &quot;sha256&quot;: &quot;c3007d42c32c8600d2a92c848bfb3ccf56f9b5cc550536042a7139e28275fb1b&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;client.stderr&quot;,
+      &quot;size_bytes&quot;: 0,
+      &quot;sha256&quot;: &quot;e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;command.json&quot;,
+      &quot;size_bytes&quot;: 374,
+      &quot;sha256&quot;: &quot;bda95d8189d946595c89288d14a1ff9df37498e2c94a195adc38e555733535b5&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;config.json&quot;,
+      &quot;size_bytes&quot;: 921,
+      &quot;sha256&quot;: &quot;ee8f3dca59041c4dd52575e0e462ffcf0a121126d976249a7b510cc9be7c9676&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;events.jsonl&quot;,
+      &quot;size_bytes&quot;: 731,
+      &quot;sha256&quot;: &quot;58cd8093b0db96735465a1f557f527d24a5d91765b801cd0c9b23c4fc5d429f7&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;manifest.json&quot;,
+      &quot;size_bytes&quot;: 3730,
+      &quot;sha256&quot;: &quot;6ce82ffb4f7fadc99b304e4749b5f4fd894c2ff26b0927c25870141dcaca806c&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;traffic_summary.json&quot;,
+      &quot;size_bytes&quot;: 19019,
+      &quot;sha256&quot;: &quot;11d96ffa625a11fcac78ada547ec55c97d029f68d2cf1f763c30d4ef7bd63205&quot;
+    }
+  ],
+  &quot;goodput_evidence&quot;: [
+    {
+      &quot;artifact&quot;: &quot;client.json&quot;,
+      &quot;json_pointer&quot;: &quot;/server_output_json/end/sum_received&quot;,
+      &quot;sha256&quot;: &quot;c3007d42c32c8600d2a92c848bfb3ccf56f9b5cc550536042a7139e28275fb1b&quot;,
+      &quot;source&quot;: &quot;embedded_server&quot;,
+      &quot;derivation&quot;: &quot;goodput_bps&quot;,
+      &quot;inputs&quot;: [
+        &quot;/server_output_json/end/sum_received/bytes&quot;,
+        &quot;/server_output_json/end/sum_received/start&quot;,
+        &quot;/server_output_json/end/sum_received/end&quot;
+      ]
+    }
+  ]
+}</pre></details></section>
+<section><div class='run-heading'><h2>Run 2</h2><span>pilot · pilot · pending</span></div><p>Integrity: <strong>verified</strong> · Traffic: planned · Traffic result verified: False</p><table><tbody><tr><th scope='row'>Receiver goodput</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Receiver bytes</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Retained duration</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Sender retransmits</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Endpoint byte residual</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr></tbody></table><p class='flags'>No recorded flags</p><details><summary>Source digests and goodput evidence</summary><pre>{
+  &quot;source_digests&quot;: [
+    {
+      &quot;artifact&quot;: &quot;checksums.json&quot;,
+      &quot;size_bytes&quot;: 384,
+      &quot;sha256&quot;: &quot;d860fe51684b94c11c9a1a96691255587fe63b5fb2bf8e3cb40548c41dadf586&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;command.json&quot;,
+      &quot;size_bytes&quot;: 324,
+      &quot;sha256&quot;: &quot;46453bace04d6226094199c1b3166eda5a4095d416b13be1e165950bc40fed53&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;config.json&quot;,
+      &quot;size_bytes&quot;: 906,
+      &quot;sha256&quot;: &quot;7c833a2dea805dac4a26fd6cd1d2eef7787a39a44da51120117679d61cbe5ebd&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;events.jsonl&quot;,
+      &quot;size_bytes&quot;: 99,
+      &quot;sha256&quot;: &quot;c6610668c9a375aa1ed12b0c336dce88f2cda8276e4a5908aa1baefa6285a8f9&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;manifest.json&quot;,
+      &quot;size_bytes&quot;: 2695,
+      &quot;sha256&quot;: &quot;409086e8d8202a1c85091afc0ef832e222cb6ce3d4acd926ffbfb0c9fedaf3b3&quot;
+    }
+  ],
+  &quot;goodput_evidence&quot;: []
+}</pre></details></section>
+<section><div class='run-heading'><h2>Run 3</h2><span>pilot · pilot · rejected</span></div><p>Integrity: <strong>verified</strong> · Traffic: failed · Traffic result verified: False</p><table><tbody><tr><th scope='row'>Receiver goodput</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Receiver bytes</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Retained duration</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Sender retransmits</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr><tr><th scope='row'>Endpoint byte residual</th><td>Unavailable: NO_TRAFFIC_RESULT</td></tr></tbody></table><p class='flags'>No recorded flags</p><details><summary>Source digests and goodput evidence</summary><pre>{
+  &quot;source_digests&quot;: [
+    {
+      &quot;artifact&quot;: &quot;checksums.json&quot;,
+      &quot;size_bytes&quot;: 616,
+      &quot;sha256&quot;: &quot;f95f74a1b50c8809d2e45fbe1f65541d6d80111e36645fb5178b0bead1324ac5&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;client.json&quot;,
+      &quot;size_bytes&quot;: 28,
+      &quot;sha256&quot;: &quot;8bdbb2b8d853febaf54c4696e813429aa448046877091a71ab89f4f2f963dadc&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;client.stderr&quot;,
+      &quot;size_bytes&quot;: 0,
+      &quot;sha256&quot;: &quot;e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;command.json&quot;,
+      &quot;size_bytes&quot;: 394,
+      &quot;sha256&quot;: &quot;9c7ff626e93b258feb46c16af28cf179592cdf7090993d9b54bed3f0833d791b&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;config.json&quot;,
+      &quot;size_bytes&quot;: 921,
+      &quot;sha256&quot;: &quot;6bf5d318bed4471d7856590a1957fafde6bb0b40a1be9fc6b7e6f98b8b1df885&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;events.jsonl&quot;,
+      &quot;size_bytes&quot;: 656,
+      &quot;sha256&quot;: &quot;9bd3a0a73d5c3fda0e15956b9191b43b2c99c94793e1af01dc9a3451cbe58b2c&quot;
+    },
+    {
+      &quot;artifact&quot;: &quot;manifest.json&quot;,
+      &quot;size_bytes&quot;: 3508,
+      &quot;sha256&quot;: &quot;18f7c60b38ea5e48ccc80fb85e2226efd080e99f7d70741d600408ddc80d0529&quot;
+    }
+  ],
+  &quot;goodput_evidence&quot;: []
+}</pre></details></section>
+<section><div class='run-heading'><h2>Run 4</h2><span>Unavailable · Unavailable · Unavailable</span></div><p>Integrity: <strong>failed</strong> · Traffic: Unavailable · Traffic result verified: Unavailable</p><table><tbody><tr><th scope='row'>Receiver goodput</th><td>Unavailable: INPUT_MISSING</td></tr><tr><th scope='row'>Receiver bytes</th><td>Unavailable: INPUT_MISSING</td></tr><tr><th scope='row'>Retained duration</th><td>Unavailable: INPUT_MISSING</td></tr><tr><th scope='row'>Sender retransmits</th><td>Unavailable: INPUT_MISSING</td></tr><tr><th scope='row'>Endpoint byte residual</th><td>Unavailable: INPUT_MISSING</td></tr></tbody></table><p class='flags'>INPUT_MISSING</p><details><summary>Source digests and goodput evidence</summary><pre>{
+  &quot;source_digests&quot;: [],
+  &quot;goodput_evidence&quot;: []
+}</pre></details></section><footer><h2>How to read this report</h2><ul><li>Draft report. No performance claims have been accepted for publication.</li><li>Synthetic runs are illustrations, and pilot runs are exploratory—not retained benchmarks.</li><li>Integrity, traffic verification and evaluation eligibility are separate statuses.</li><li>Runs are listed separately: no pooled averages, statistical comparison or causal diagnosis.</li><li>Receiver goodput comes from the parser&#x27;s non-omitted receiver result. Zero remains zero.</li><li>Endpoint byte residual is not a packet-loss estimate. Retransmits are sender observations.</li><li>Source hashes identify captured bytes; they do not authenticate experiment origin.</li><li>Identifiers and raw logs are omitted. Review the report before sharing it.</li></ul></footer></body></html>

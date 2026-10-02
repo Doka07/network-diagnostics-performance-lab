@@ -1,5 +1,9 @@
 # Phase 2 runner and parser contracts
 
+Current role update: Claude owns independent tests, methodology/arithmetic/chart review
+and code review for all phases. Gemini references below describe historical contract work;
+its canonical file is retained read-only. Phase 2 software has been accepted by Denis.
+
 Status: both agents approved these contracts and the owner authorized Phase 2 implementation
 on 2026-10-01. Implementation is available for independent tests and code review. Additional
 hardware traffic has not been authorized. Gemini owns executable independent tests; the

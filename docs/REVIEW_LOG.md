@@ -1,5 +1,96 @@
 # Review log
 
+## 2026-10-02 — combined release reviews closed
+
+Read Claude's closing APPROVED verdict and Gemini's final combined-release approval.
+Both close PREVIEW-1 after checking the corrected preview; no blocking findings remain.
+Claude independently reran all 483 tests on each supported runtime. Updated stale public
+review status. Remaining release actions are owner commit/push, fresh remote CI and
+owner approval of publication, not additional independent review rounds.
+
+## 2026-10-02 — PREVIEW-1 remediation delivered
+
+Claude and Gemini approved results production code but blocked the generated example:
+synthetic execution was refused, leaving absent fixture runs. The dev generator now uses
+supported pilot fixtures, preserves their evidence labels, adds an explicit preview-only
+synthetic banner, and asserts the expected row states/integrity/metric availability.
+Regenerated results.html; 70 results tests and static checks pass. Updated draft wording
+to smoothed TCP RTT and ledger to reviewer-reported 483 full-suite tests. Reviewer
+verification of the corrected preview and owner publication/labeling acceptance remain open.
+
+## 2026-10-02 — results contract reconciliation
+
+Read Claude's contract-first RT-00–08 handoff and Gemini's methodology contract review.
+Accepted RR-1–8 in RESULTS_CONTRACTS.md. Implemented offline reporting, corrected issues
+identified by the independent suite, and obtained 64 passing results tests without editing
+them. Actual code/HTML/post review is the next assignment in HANDOFF.md. Contract approval
+does not establish implementation approval or authorize publication.
+
+## 2026-10-02 — release candidate verified and Claude round 4 approved
+
+Claude's direct headless review approved final UI/failure-display fixes and status-label
+hardening, with 413 full-suite passes on Python 3.12. Codex validated Python 3.14 locally:
+412 full-suite passes before the final added test, followed by all 20 final Qt tests.
+Lint/format/diff checks, wheel/sdist build and clean core-wheel offline smoke checks pass.
+Gemini's earlier 400-test methodology approval and its five proposed test cases were read;
+Claude implemented/triaged them without transferring test ownership. Fresh Gemini follow-up
+is unconfirmed because the standalone CLI rejected authentication (UNSUPPORTED_CLIENT).
+No reviewer verdict was rewritten or extended by Codex. Current handoff records that gate,
+owner acceptance, owner commit/push and remote CI, plus later project phases.
+
+## 2026-10-02 — two-reviewer plan restored
+
+Owner reactivated Gemini for methodology and GUI review; Claude retains existing tests.
+Both canonical files were read. Gemini has no current GUI verdict; Claude's current
+verdict precedes the completed chart/color corrections. HANDOFF.md now assigns parallel
+reviews, reconciliation, owner acceptance and remote CI in order. Past role decisions
+below remain history; neither independent verdict has been rewritten by Codex.
+
+## 2026-10-02 — resumed review corrections ready
+
+Claude approved AUD-01–03, P2-F1 and GUI lifecycle, corrected the duplicate fixture and
+added review regressions. Codex addressed CORE-1 (verification independent of provenance),
+CHART-1 (separate warm-up and retained display windows, R-27) and UI-1 (theme link colors).
+Emergency finalization also preserves prior reasons and interruption state. The full suite
+with Qt required passes all 400 tests. Screenshot generation is now reproducible from the
+repository. Claude's final code/visual review, owner acceptance and new remote CI remain open.
+
+## 2026-10-01 — GUI implementation and audit corrections submitted for review
+
+Codex incorporated R-1–R-26 and implemented shared snapshot verification, presentation
+and the optional offline Qt viewer. AUD-01–03 now pass all 49 independent regressions;
+P2-F1 has bounded summary output and failed-finalization recording. Full required-GUI
+suite: 384 passed, one duplicate-directory fixture error in the quality-flags test.
+Independent tests were not modified by Codex. Lint, format and package build pass.
+Native synthetic previews are in docs/mockups/. Claude's correction/review tasks and
+remaining owner/CI gates are recorded in the current HANDOFF.md. This is an implementation
+submission, not an independent approval or authorization for traffic.
+
+## Fresh audit after reviewer role consolidation
+
+Codex reproduced three previously uncovered cases: child SIGINT/SIGTERM mask inheritance
+(AUD-01), acceptance of contradictory planned/transfer-completed artifacts (AUD-02), and
+verify returning exit 1 for invalid recorded configuration (AUD-03). Reproductions used
+temporary artifacts and a fake local process; no traffic ran. Corrective work and Claude's
+independent regression assignments are in the active HANDOFF.md. Documentation now records
+accepted Phase 2 software while preserving outstanding hardware and GUI work.
+
+## Standing Claude assignment and GUI contract handoff
+
+Owner confirms Claude takes over all former Gemini responsibilities for every phase.
+There is one independent reviewer. Active role files updated; historical verdicts retained.
+Owner accepted Phase 2 software and opened GUI mockup/offline viewer scope. Codex supplied
+GUI_CONTRACTS.md for GC-1–12 review and independent TG-01–12 test authoring. Snapshot-based
+verification is shared with the CLI; no separate GUI measurement/verification algorithm.
+GUI implementation, dependency compatibility and visual review remain pending.
+
+## Phase 2 remote CI passed
+
+After the owner's fixture-fix push, Actions run 36914479401 passed all validation steps
+on Python 3.12 and 3.14 for commit 680659c9248e1d327c14f8ce64558a23bf031356.
+The prior CI failure is closed. This confirms software checks; it does not constitute
+owner acceptance or hardware pilot evidence.
+
 ## Phase 2 CI fixture correction
 
 Run 36913304350 failed identically on Python 3.12/3.14 because the SIGINT test selected

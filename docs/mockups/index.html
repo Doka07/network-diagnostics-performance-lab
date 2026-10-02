@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DiagLab — offline inspector preview</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#0d141d;color:#e6edf4}body{max-width:1500px;margin:40px auto;padding:0 28px}header{display:flex;align-items:center;justify-content:space-between;gap:24px}h1{font-size:30px;letter-spacing:-1px;margin:6px 0}small{color:#20bca9;letter-spacing:2px}p{color:#a7b6c6;line-height:1.7}.label{background:#392e1c;color:#f7cb7d;padding:12px 16px;border-radius:6px;border:1px solid #655034}.choices{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 16px}button{border:1px solid #34475e;border-radius:6px;background:#182433;color:inherit;padding:10px 16px;cursor:pointer;font:inherit}button[aria-pressed=true]{background:#0c716c;border-color:#1db7a8}button:focus-visible{outline:3px solid #eabc68}figure{margin:0}img{width:100%;border:1px solid #34475e;border-radius:8px;box-shadow:0 20px 80px #0005}figcaption{padding:12px 2px;color:#b6c5d3}footer{display:flex;gap:24px;flex-wrap:wrap;font-size:14px;margin:25px 0}a{color:#45d7c4}
+</style>
+<header><div><small>DIAGLAB / DESIGN REVIEW</small><h1>Your evidence, in context.</h1><p>Native Python desktop inspector · offline viewer · implementation preview</p></div></header>
+<p class="label"><strong>Synthetic illustration.</strong> Every number below is invented test data. These images are not measurements or performance claims.</p>
+<nav class="choices" aria-label="Preview state">
+<button data-image="completed-dark" aria-pressed="true">Completed · dark</button>
+<button data-image="completed-light" aria-pressed="false">Completed · light</button>
+<button data-image="failed-dark" aria-pressed="false">Failed transfer</button>
+<button data-image="interrupted-dark" aria-pressed="false">Interrupted</button>
+<button data-image="integrity-failed-dark" aria-pressed="false">Integrity failure</button>
+<button data-image="unfinalized-dark" aria-pressed="false">Unfinalized</button>
+<button data-image="unavailable-rtt-dark" aria-pressed="false">Unavailable RTT</button>
+</nav>
+<figure><img id="preview" src="completed-dark.png" alt="DiagLab completed run in dark theme, using synthetic data"><figcaption id="caption">Completed · dark. Separate integrity, traffic and eligibility indicators; receiver goodput, flow details and source pointers.</figcaption></figure>
+<footer><span>Local images only · no network resources</span><span>Charts: wheel to zoom, click an interval for evidence in the desktop app</span><a href="../GUI_CONTRACTS.md">Reviewed contract</a></footer>
+<script>
+const image=document.querySelector('#preview'),caption=document.querySelector('#caption');
+document.querySelectorAll('button[data-image]').forEach(button=>button.addEventListener('click',()=>{
+ document.querySelectorAll('button[data-image]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
+ image.src=button.dataset.image+'.png';image.alt='DiagLab '+button.textContent+' — synthetic illustration';
+ caption.textContent=button.textContent+'. Actual offline viewer screenshot with invented test data.';
+}));
+</script></html>

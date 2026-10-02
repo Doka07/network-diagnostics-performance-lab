@@ -1,9 +1,12 @@
 # Limitations
 
-- Phase 2 implements baseline pilot traffic and parsing; independent Phase 2 tests and
-  code review are pending. Telemetry, faults, recovery and diagnosis remain unimplemented.
-- Phase 1 was accepted with 134 independent tests and green Python 3.12/3.14 Linux CI.
-  The new runner has not completed remote CI or an authorized hardware pilot.
+- Phase 2 software was accepted with 198 tests and green Python 3.12/3.14 Linux CI.
+  Telemetry, faults, recovery and diagnosis remain unimplemented. The offline GUI is
+  implemented, awaiting final review. Claude owns existing tests; Gemini provides a second
+  independent methodology and GUI review alongside Claude's broader review.
+- Follow-up audit found child signal-mask inheritance and verification consistency/error
+  mapping gaps; corrections now pass all 49 independent audit regressions. See HANDOFF.md
+  for the remaining fixture correction and review gate. No runner hardware pilot has run.
 - A private manual readiness transfer passed. Physical topology, shared traffic and a
   dated inventory supplement remain open; Phase 0 is not fully closed.
 - Offline validation does not confirm live route identity. Explicit execution verifies

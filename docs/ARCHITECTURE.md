@@ -1,5 +1,12 @@
 # Architecture
 
+Current implementation includes the Phase 2 baseline runner/parser and durable run/verify
+workflow in addition to the Phase 1 path below. The CLI and offline GUI now share the
+Qt-free snapshot verification core in diaglab.inspection. diaglab.presentation builds
+immutable display values and chart series; diaglab.gui supplies the optional PySide6
+viewer and cancellable worker. Live orchestration remains in diaglab.run and is not
+imported by inspection or presentation. Independent implementation review is pending.
+
 Phase 1 implements an offline path:
 
 ```text

@@ -16,7 +16,6 @@ from diaglab.exceptions import (
     DiaglabError,
     FaultCleanupError,
     MissingInputError,
-    SafetyPreflightError,
     TrafficExecutionError,
 )
 from diaglab.models import RunContext, VerificationResult
@@ -24,16 +23,10 @@ from diaglab.serialization import canonical_json, parse_json
 from diaglab.traffic.parser import MAX_DOCUMENT_BYTES, parse_iperf3
 from diaglab.traffic.runner import Iperf3TrafficAdapter
 from diaglab.validation import validate_record
+from diaglab.verification_support import _phase_scope, _report_valid, _traffic_identity
 
 BASE_PAYLOADS = {"config.json", "command.json", "events.jsonl"}
 RAW_PAYLOADS = {"client.json", "client.stderr"}
-UNVERIFIED_FLAGS = {
-    "RECEIVER_SOURCE_MISMATCH",
-    "SERVER_OUTPUT_UNAVAILABLE",
-    "REPORTED_RATE_MISMATCH",
-    "INTERVAL_GAP",
-    "OMIT_METADATA_MISMATCH",
-}
 
 
 class RunInterrupted(DiaglabError):
@@ -48,37 +41,38 @@ class RunInterrupted(DiaglabError):
 def _signals():
     previous = {}
     interrupted = False
+    deferred = False
+    pending = None
 
     def handler(signum, frame):
-        nonlocal interrupted
+        nonlocal interrupted, pending
+        if deferred:
+            pending = pending or signum
+            return
         if not interrupted:
             interrupted = True
             raise RunInterrupted(signum)
+
+    @contextmanager
+    def defer():
+        nonlocal deferred, pending
+        deferred = True
+        try:
+            yield
+        finally:
+            deferred = False
+            if pending is not None:
+                signum, pending = pending, None
+                handler(signum, None)
 
     if threading.current_thread() is threading.main_thread():
         for signum in (signal.SIGINT, signal.SIGTERM):
             previous[signum] = signal.signal(signum, handler)
     try:
-        yield
+        yield defer
     finally:
         for signum, old in previous.items():
             signal.signal(signum, old)
-
-
-def _phase_scope(config: ExperimentConfig, run_role: str, execute: bool) -> None:
-    data = config.data
-    if run_role not in {"warmup", "pilot"}:
-        raise SafetyPreflightError("Phase 2 only supports warmup and pilot roles")
-    if data["scenario"]["kind"] != "baseline" or data["traffic"]["streams"] not in (1, 4):
-        raise SafetyPreflightError("Phase 2 requires baseline and one or four streams")
-    if execute and (
-        data["evidence_kind"] != "pilot"
-        or data["safety"]["dry_run"]
-        or not data["safety"]["approved_profile_id"]
-    ):
-        raise SafetyPreflightError(
-            "--execute requires pilot evidence, dry_run false and profile ID"
-        )
 
 
 def _decode(store: ArtifactStore, name: str, *, limit: int = MAX_DOCUMENT_BYTES):
@@ -97,24 +91,6 @@ def _event(events: list[dict], name: str, message: str | None = None) -> None:
     if message:
         record["message"] = message[:256]
     events.append(record)
-
-
-def _report_valid(report) -> bool:
-    return not UNVERIFIED_FLAGS.intersection(report.quality_flags)
-
-
-def _traffic_identity(config: ExperimentConfig, source: str, raw: str, report) -> None:
-    record = parse_json(raw)
-    duration = record.get("start", {}).get("test_start", {}).get("duration")
-    if type(duration) not in (int, float) or duration != config.data["traffic"]["duration_s"]:
-        raise ArtifactIntegrityError("iperf3 duration setting differs from approved configuration")
-    for flow in report.flows:
-        if (
-            flow.local_host != source
-            or flow.remote_host != config.data["target"]["host"]
-            or flow.remote_port != config.data["target"]["port"]
-        ):
-            raise ArtifactIntegrityError("iperf3 socket identities differ from approved target")
 
 
 def run_experiment(
@@ -144,7 +120,7 @@ def run_experiment(
         "timeout_stage": None,
         "failure_reason": None,
     }
-    with ArtifactStore(output, create=True) as store, _signals():
+    with ArtifactStore(output, create=True) as store, _signals() as defer_signals:
         store.write_json("manifest.json", manifest)
         store.write_json("config.json", config.to_dict())
         _event(events, "RUN_PLANNED")
@@ -159,14 +135,9 @@ def run_experiment(
                 manifest["cleanup"] = {"status": "pending", "reasons": []}
                 manifest["events"] = events.copy()
                 store.replace_json("manifest.json", manifest)
-                # Defer signals until the owned handle is available to final cleanup.
-                previous_mask = signal.pthread_sigmask(
-                    signal.SIG_BLOCK, {signal.SIGINT, signal.SIGTERM}
-                )
-                try:
+                # Record interruptions until ownership is assigned; do not mask the child.
+                with defer_signals():
                     handle = adapter.start(context)
-                finally:
-                    signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
                 _event(events, "TRAFFIC_STARTED")
                 result = adapter.wait(handle)
                 command["returncode"] = result.returncode
@@ -187,11 +158,18 @@ def run_experiment(
                     omit_s=config.data["traffic"]["omit_s"],
                 )
                 _traffic_identity(config, adapter.source, raw, report)
-                command["transfer_completed"] = True
                 command["result_verified"] = _report_valid(report)
                 summary = {"schema_version": "1.0", "report": report.to_dict()}
                 validate_record("traffic_summary", summary)
-                store.write_json("traffic_summary.json", summary)
+                summary_bytes = canonical_json(summary) + b"\n"
+                if len(summary_bytes) > MAX_DOCUMENT_BYTES:
+                    command["result_verified"] = False
+                    raise TrafficExecutionError(
+                        "derived summary exceeds 16 MiB",
+                        reason_code="SUMMARY_OUTPUT_LIMIT_EXCEEDED",
+                    )
+                store.write("traffic_summary.json", summary_bytes)
+                command["transfer_completed"] = True
                 if not command["result_verified"]:
                     raise TrafficExecutionError(
                         "traffic output did not reconcile",
@@ -223,6 +201,7 @@ def run_experiment(
                 ]
         except BaseException as exc:
             failure = exc
+            command["result_verified"] = False
             manifest["state"] = (
                 "interrupted" if isinstance(exc, (RunInterrupted, KeyboardInterrupt)) else "failed"
             )
@@ -244,6 +223,7 @@ def run_experiment(
                     failure = (
                         exc if isinstance(exc, FaultCleanupError) else FaultCleanupError(str(exc))
                     )
+                    command["result_verified"] = False
                     command["failure_reason"] = failure.code
                     manifest["state"] = "failed"
                     manifest["cleanup"] = {
@@ -290,6 +270,21 @@ def run_experiment(
                 validate_record("manifest", manifest)
                 store.replace_json("manifest.json", manifest)
             except BaseException as finalize_error:
+                # Preserve honest terminal state even when payload finalization cannot finish.
+                if manifest["state"] != "interrupted":
+                    manifest["state"] = "failed"
+                reasons = list(manifest["eligibility"]["reasons"])
+                if "FINALIZATION_FAILED" not in reasons:
+                    reasons.append("FINALIZATION_FAILED")
+                manifest["eligibility"] = {"status": "rejected", "reasons": reasons}
+                _event(events, "RUN_FAILED", "FINALIZATION_FAILED")
+                manifest["events"] = events
+                try:
+                    store.replace_json("manifest.json", manifest)
+                except Exception as emergency_error:
+                    finalize_error.add_note(
+                        f"Emergency manifest failed: {type(emergency_error).__name__}"
+                    )
                 if failure is not None:
                     if isinstance(failure, FaultCleanupError):
                         failure.add_note(f"Artifact finalization also failed: {finalize_error}")
@@ -302,109 +297,11 @@ def run_experiment(
 
 
 def verify_run(path: Path) -> VerificationResult:
-    with ArtifactStore(path) as store:
-        manifest = _decode(store, "manifest.json", limit=1024 * 1024)
-        validate_record("manifest", manifest)
-        # A Phase 1 planned manifest has no Phase 2 evidence to verify.
-        if manifest["state"] == "planned" and not manifest["artifacts"]:
-            if store.names() != {"manifest.json"}:
-                raise ArtifactIntegrityError("unexpected files in planned run")
-            return VerificationResult(True, ("PLANNED_ONLY",), "planned")
-        if manifest["state"] == "running" or ".run.lock" in store.names():
-            raise ArtifactIntegrityError("run has not been finalized")
-        checksums = _decode(store, "checksums.json", limit=1024 * 1024)
-        validate_record("checksums", checksums)
-        entries = checksums["files"]
-        paths = [entry["path"] for entry in entries]
-        manifest_entries = {entry["path"]: entry for entry in manifest["artifacts"]}
-        if len(paths) != len(set(paths)) or len(manifest_entries) != len(manifest["artifacts"]):
-            raise ArtifactIntegrityError("duplicate artifact digest entries")
-        if set(manifest_entries) != set(paths) | {"checksums.json"}:
-            raise ArtifactIntegrityError("manifest/checksum path coverage differs")
-        for entry in entries:
-            if store.digest(entry["path"]) != entry or manifest_entries[entry["path"]] != entry:
-                raise ArtifactIntegrityError(f"artifact digest mismatch: {entry['path']}")
-        if store.digest("checksums.json") != manifest_entries["checksums.json"]:
-            raise ArtifactIntegrityError("checksums file digest mismatch")
-        if store.names() != set(manifest_entries) | {"manifest.json"}:
-            raise ArtifactIntegrityError("unexpected or unlisted files in run")
-        config = ExperimentConfig.from_dict(_decode(store, "config.json", limit=1024 * 1024))
-        if (
-            config.sha256 != manifest["config_sha256"]
-            or config.data["campaign_id"] != manifest["campaign_id"]
-        ):
-            raise ArtifactIntegrityError("config identity mismatch")
-        command = _decode(store, "command.json", limit=1024 * 1024)
-        validate_record("run_command", command)
-        try:
-            _phase_scope(config, manifest["run_role"], command["execute"])
-        except SafetyPreflightError as exc:
-            raise ArtifactIntegrityError(f"invalid recorded phase scope: {exc}") from exc
-        if config.data["evidence_kind"] != manifest["evidence_kind"]:
-            raise ArtifactIntegrityError("config evidence kind differs from manifest")
-        expected = BASE_PAYLOADS.copy()
-        if RAW_PAYLOADS.intersection(paths):
-            expected |= RAW_PAYLOADS
-        if "traffic_summary.json" in paths:
-            expected.add("traffic_summary.json")
-        if set(paths) != expected:
-            raise ArtifactIntegrityError("missing required or unexpected payload coverage")
-        if command["execute"] is False and (
-            manifest["state"] != "planned" or expected != BASE_PAYLOADS
-        ):
-            raise ArtifactIntegrityError("offline plan is inconsistent with execution artifacts")
-        events = [
-            _decode_event(line)
-            for line in store.read("events.jsonl", limit=1024 * 1024).splitlines()
-        ]
-        if events != manifest["events"]:
-            raise ArtifactIntegrityError("manifest event history differs from event artifact")
-        if any(
-            event["name"] == "TRAFFIC_STARTED" for event in events
-        ) and not RAW_PAYLOADS.issubset(paths):
-            raise ArtifactIntegrityError("started process is missing raw output artifacts")
-        if command["returncode"] is not None and not RAW_PAYLOADS.issubset(paths):
-            raise ArtifactIntegrityError("process exit is missing raw output artifacts")
-        completed = command["transfer_completed"]
-        verified = False
-        if manifest["state"] == "completed" and (
-            not command["execute"]
-            or not RAW_PAYLOADS.issubset(paths)
-            or "traffic_summary.json" not in paths
-            or command.get("returncode") != 0
-            or manifest["cleanup"]["status"] != "verified"
-            or not completed
-        ):
-            raise ArtifactIntegrityError("completed run lacks required transfer evidence")
-        if "traffic_summary.json" in paths:
-            summary = _decode(store, "traffic_summary.json")
-            validate_record("traffic_summary", summary)
-            raw = store.read("client.json").decode("utf-8")
-            report = parse_iperf3(
-                raw,
-                expected_streams=config.data["traffic"]["streams"],
-                omit_s=config.data["traffic"]["omit_s"],
-            )
-            if report.to_dict() != summary["report"]:
-                raise ArtifactIntegrityError("traffic summary differs from reconstructed report")
-            if not command["execute"] or command["returncode"] != 0 or not completed:
-                raise ArtifactIntegrityError("summary is inconsistent with process outcome")
-            _traffic_identity(config, command["source_ip"], raw, report)
-            verified = _report_valid(report)
-            if manifest["state"] == "completed" and not verified:
-                raise ArtifactIntegrityError("completed run has unreconciled traffic result")
-        elif manifest["state"] == "completed":
-            raise MissingInputError("completed run lacks traffic summary")
-        if (
-            type(command.get("result_verified")) is not bool
-            or command["result_verified"] != verified
-        ):
-            raise ArtifactIntegrityError("recorded verification outcome differs from evidence")
-        return VerificationResult(True, (), manifest["state"], completed, verified)
+    from diaglab.inspection import load_run
 
-
-def _decode_event(line: bytes) -> dict:
-    try:
-        return parse_json(line.decode())
-    except UnicodeError as exc:
-        raise ArtifactIntegrityError("invalid event encoding") from exc
+    inspection = load_run(path, include_evidence=False)
+    if inspection.verification is not None:
+        return inspection.verification
+    issue = inspection.issues[0]
+    error = MissingInputError if issue.code == "INPUT_MISSING" else ArtifactIntegrityError
+    raise error(f"{issue.code}: {issue.message}")

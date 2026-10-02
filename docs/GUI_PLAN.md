@@ -2,7 +2,7 @@
 
 Denis requested a polished Python desktop diagnostic tool inspired by Wireshark.
 This is a product requirement; implementation scheduling and contracts need independent
-review. Current Phase 2 backend review continues.
+review. Phase 2 software is accepted; Denis authorized mockup and offline viewer work.
 
 ## Experience
 
@@ -56,8 +56,10 @@ observer-overhead study if the GUI is active during retained runs.
 4. Add reviewed live controls after worker lifecycle/cancellation contracts and tests.
 5. Add analyzer explanations, comparison and reviewed export as later phases mature.
 
-Claude reviews architecture, lifecycle and scope. Gemini specifies independent tests for
-value fidelity, missing data, filtering, responsiveness and cancellation. Both update their
-existing private canonical review files; GUI work does not close any current phase gate.
+Claude reviews architecture, lifecycle, scope, methodology, arithmetic and chart fidelity,
+and writes independent tests for values, missing data, filtering, responsiveness and
+cancellation. Gemini provides a second independent methodology and GUI review; Claude
+retains existing test ownership. Each updates their existing canonical review file.
+GUI contracts are in GUI_CONTRACTS.md. GUI work does not close later phase gates.
 
 Toolkit reference: https://doc.qt.io/qtforpython-6/

@@ -12,9 +12,11 @@ dependencies = ["PyYAML>=6.0.1,<7", "jsonschema>=4.10.3,<5"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "ruff>=0.9,<1", "build>=1,<2"]
+gui = ["PySide6>=6.10,<7"]
 
 [project.scripts]
 diaglab = "diaglab.cli:main"
+diaglab-gui = "diaglab.gui:main"
 
 [tool.setuptools.packages.find]
 include = ["diaglab*"]

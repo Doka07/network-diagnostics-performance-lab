@@ -1,4 +1,10 @@
-# Gemini independent validation role
+# Gemini review role — active
+
+Gemini provides a second independent methodology and GUI review. Claude retains existing
+test ownership and broader code/safety review. Review arithmetic, chart/source fidelity,
+warm-up display, evidence links, missing data and usability. Read docs/HANDOFF.md and
+docs/GUI_CONTRACTS.md. Route proposed regressions to Claude; do not edit his tests or
+production code unless separately assigned. The test-authoring assignment below is history.
 
 Follow AGENTS.md. Author independent tests against docs/CONTRACTS.md and the approved test
 matrix. Phase 1 covers configuration, metric round trips, manifest hashes/paths and CLI

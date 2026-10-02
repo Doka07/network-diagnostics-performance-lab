@@ -3,6 +3,10 @@
 Phase 2 APIs and CLI behavior are in [PHASE2_CONTRACTS.md](PHASE2_CONTRACTS.md).
 Implementation is available for independent testing and code review.
 
+Saved-run results report/export contracts are in [RESULTS_CONTRACTS.md](RESULTS_CONTRACTS.md).
+`diaglab results --run DIR [--run DIR ...] --output DIR` explicitly writes a new minimized
+HTML/JSON report bundle outside source directories; it does not execute experiments.
+
 The schemas in `diaglab/schemas/` are bundled package resources and the authoritative
 serialized field definitions. All seven use JSON Schema draft 2020-12. Python validation
 additionally enforces finite JSON values, exact numeric types and semantic constraints.

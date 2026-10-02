@@ -1,5 +1,27 @@
 # Decisions
 
+## 2026-10-02 — results reporting and post drafting
+
+Denis requested work on a results tool and final post. Codex's initial interpretation is
+an offline saved-run report/export, with a draft describing the implemented software and
+engineering lessons. RESULTS_CONTRACTS.md defines this bounded scope. The request does not
+turn fixtures into measurements or publish the post. Existing reviewer conversations and
+canonical files are the coordination mechanism; replacement sessions are not authorized.
+
+## 2026-10-02 — two active independent reviewers
+
+Denis restored Gemini as the second independent methodology and GUI reviewer. Claude
+retains existing independent test ownership and broader review responsibilities. Both
+canonical review files are active; prior role assignments below are historical.
+
+## Phase 2 accepted; GUI and standing review assignment
+
+After verified green CI, Denis instructed Codex to go ahead with GUI mockup and offline
+viewer work, accepting Phase 2 software. Hardware pilots and live GUI controls remain
+separate. Denis confirmed Claude takes over all former Gemini duties for every phase:
+independent tests, methodology, arithmetic and chart fidelity, alongside code review.
+There is one independent reviewer. Historical Gemini records are retained unchanged.
+
 ## 2026-10-01 — Desktop GUI requirement
 
 Denis requested a polished desktop interface inspired by Wireshark. Record it as a

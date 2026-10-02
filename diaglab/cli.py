@@ -44,13 +44,25 @@ def parser() -> argparse.ArgumentParser:
     run.add_argument("--run-role", choices=("warmup", "pilot"), default="pilot")
     verify = commands.add_parser("verify", help="offline artifact/checksum verification")
     verify.add_argument("--run", required=True)
+    results = commands.add_parser("results", help="export an offline saved-run results report")
+    results.add_argument("--run", required=True, action="append")
+    results.add_argument("--output", required=True)
     return root
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
-        if args.command == "verify":
+        if args.command == "results":
+            from diaglab.results import export_results
+
+            path = export_results([Path(value) for value in args.run], Path(args.output))
+            result = {
+                "report": str(path),
+                "run_count": len(args.run),
+                "performance_claims_accepted": False,
+            }
+        elif args.command == "verify":
             verification = verify_run(Path(args.run))
             result = {
                 "verified": verification.verified,

@@ -21,3 +21,18 @@ jobs:
       - run: python -m diaglab config validate --config configs/baseline.yaml
       - run: python -m pytest
       - run: python -m build
+  gui-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.14"]
+    env:
+      QT_QPA_PLATFORM: offscreen
+      NDPL_REQUIRE_GUI: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -e '.[dev,gui]'
+      - run: python -m pytest tests/inspection
