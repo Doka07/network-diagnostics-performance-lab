@@ -23,8 +23,11 @@ E. Collect fresh held-out individual-scenario evaluation under the frozen settin
 9. Review evidence, reproducibility, charts and public claims before publication.
 
 Phase 1 is accepted after independent reviews, passing tests, and successful remote CI.
-Phase 2 software is also accepted with 198 tests and green Python 3.12/3.14 CI; its
-hardware pilots are still pending. GUI steps 1–2 are authorized. Subsequent audit findings
+Phase 2 software was accepted with 198 tests and green Python 3.12/3.14 CI. Bounded
+one/four-stream pilots subsequently completed on 2026-10-03 after Windows sleep/SSH
+recovery and an interval-parser correction; see HARDWARE_DIAGNOSTICS.md for limits and
+preserved failed attempts. These pilots do not establish a retained baseline. GUI steps
+1–2 are authorized. Subsequent audit findings
 are tracked as corrective work in HANDOFF.md, not erased by prior acceptance.
 The authorized bounded manual transfer completed and cleanup was verified. Remaining
 host inventory, physical topology confirmation, and subsequent phase gates remain pending.

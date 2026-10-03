@@ -335,18 +335,30 @@ def _intervals(
                 raise _failure("TRAFFIC_OUTPUT_UNSUPPORTED", "OMIT_METADATA_MISMATCH")
             flow_values.append((socket_id, raw, _total(raw, source, direction)))
         first = flow_values[0][2]
-        if not all(_same_window(first, item[2]) for item in flow_values):
-            raise _failure("TRAFFIC_OUTPUT_INCONSISTENT", "WINDOW_MISMATCH in parallel intervals")
+        aligned = all(_same_window(first, item[2]) for item in flow_values)
         if len({item[1]["omitted"] for item in flow_values}) != 1:
             raise _failure("TRAFFIC_OUTPUT_INCONSISTENT", "OMIT_METADATA_MISMATCH")
         aggregate = epoch.get("sum")
         if aggregate is None:
+            if not aligned:
+                raise _failure(
+                    "TRAFFIC_OUTPUT_INCONSISTENT", "WINDOW_MISMATCH in derived parallel interval"
+                )
             aggregate = {
                 "start": first.start_s,
                 "end": first.end_s,
                 "bytes": sum(item[2].bytes_count for item in flow_values),
                 "omitted": flow_values[0][1]["omitted"],
             }
+        elif not aligned:
+            # iperf reports each stream's own timestamps, but uses its first
+            # stream's clock for the supplied interval sum (iperf_api.c).
+            # Preserve that explicit aggregate, never invent aligned flow times.
+            if max(item[2].start_s for item in flow_values) >= min(
+                item[2].end_s for item in flow_values
+            ):
+                raise _failure("TRAFFIC_OUTPUT_INCONSISTENT", "WINDOW_MISMATCH: disjoint flows")
+            flags.append("PARALLEL_INTERVAL_WINDOWS_DIFFER")
         aggregate = _object(aggregate, "interval sum")
         if aggregate.get("omitted") != flow_values[0][1]["omitted"]:
             raise _failure("TRAFFIC_OUTPUT_INCONSISTENT", "OMIT_METADATA_MISMATCH")

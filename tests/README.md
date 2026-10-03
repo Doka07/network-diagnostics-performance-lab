@@ -23,6 +23,40 @@ fixtures and their provenance under `tests/fixtures/iperf3/` were prepared by Ge
   output caps with preserved prefix, idempotent wait/stop, unknown handles, single-use
   adapters, offline planning without subprocess/socket activity, SIGINT interruption and
   finalization-failure exception chaining.
+- `PRB-01–04` (`tests/integration/test_probe_server.py`): the real live preflight probe
+  against loopback-only fake receivers. It makes one bare connection with no payload,
+  a refused port gives SERVER_UNREACHABLE, it consumes a one-off server (the contract's
+  documented incompatibility), and a persistent server still accepts the client.
+- `LC-01–10` (`tests/lifecycle/`, written from docs/RECEIVER_LIFECYCLE.md plus Claude's
+  LR-1..LR-7 before reading scripts/receiver_lifecycle.py): real local fake session, stop,
+  cleanup and capture executables, no SSH, Windows or network. Covered:
+  - normal completion;
+  - the G2 regression: a stalled (and SIGTERM-ignoring) session times out, yet cleanup
+    and capture still run, the whole owned group is reaped and the traffic failure is
+    preserved verbatim;
+  - unrelated same-program processes survive;
+  - nonzero, hanging and flooding commands;
+  - strict three-boolean cleanup;
+  - missing, corrupt, unknown and path-traversal evidence;
+  - output reservation before shutdown and no overwrite of a nonempty destination;
+  - bounded session output, timeout and argv validation, and Ctrl-C during shutdown.
+  The PowerShell helper cannot be exercised offline.
+- `FZ-01–09` (`tests/lifecycle/test_finalize.py`, contract-first, before
+  `scripts/diagnostic_finalize.py` exists). These are regressions for the E1/E2/no-probe
+  operator defects:
+  - every post-run check is attempted in order despite failures, timeouts or a missing
+    binary;
+  - SHA256SUMS is always written last, covers every file (operator-status.json included)
+    and is `sha256sum -c` compatible;
+  - operator failures never land in traffic_failure, which is preserved verbatim;
+  - the lifecycle record is never rewritten by later checks;
+  - partial output and per-check timing survive timeouts;
+  - nothing is overwritten and nothing raises for runtime failures;
+  - arguments are validated before anything runs, and behaviour is identical under
+    `python -O`;
+  - FZ-09 (proposed LR-8): per-command `started_utc`/`duration_s` and `session_wait_s` in
+    the lifecycle record.
+  All fail by design until Codex implements them.
 
 Audit regressions (`tests/inspection/test_audit_regressions.py`, contract-first, before
 Codex's production fixes):

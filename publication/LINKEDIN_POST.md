@@ -1,6 +1,6 @@
 # LinkedIn draft — engineering milestone
 
-Status: draft for Denis, Claude and Gemini to review. Not posted. The results-export
+Status: reviewed software-milestone draft awaiting Denis's publication approval. Not posted. The results-export
 feature and corrected preview have independent code and methodology approval. Use a screenshot
 that keeps its synthetic-data banner visible. Do not add benchmark figures from fixtures.
 
@@ -26,8 +26,8 @@ signals from its parent. Fixing the startup and cleanup path mattered just as mu
 the charts.
 
 The tool is tested locally on Python 3.12 and 3.14. The screenshots use synthetic data;
-I’m not presenting them as benchmark results. Controlled hardware experiments and telemetry
-correlation are the next milestone.
+I’m not presenting them as benchmark results. Hardware diagnostics are underway; a
+retained baseline and telemetry correlation remain future work.
 
 Code: https://github.com/Doka07/network-diagnostics-performance-lab
 

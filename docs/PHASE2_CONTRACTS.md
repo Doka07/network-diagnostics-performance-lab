@@ -97,6 +97,14 @@ cover the same interval/window; otherwise flag WINDOW_MISMATCH and reject reconc
 Whole-window interval rate is 8 * sum(retained bytes) / sum(nonoverlapping retained
 durations), not an unweighted mean of interval rates or a sum of rates across time.
 Parallel streams add bytes over a common wall-time window, not their durations.
+For a supplied interval `sum`, iperf uses the first stream's timestamps even though
+other streams have independently sampled boundaries. Preserve each flow's actual window
+and the supplied aggregate's window; validate exact aggregate byte totals and require
+the aggregate window to match the first flow. Differing component windows must share a
+positive overlap and add `PARALLEL_INTERVAL_WINDOWS_DIFFER`; they are not silently aligned.
+Without a supplied aggregate, differing windows still fail with WINDOW_MISMATCH. This
+distinguishes reported aggregation from deriving a new aggregate; numerical serialization
+tolerances above are unchanged. Source: [iperf 3.16 interval reporter](https://github.com/esnet/iperf/blob/3.16/src/iperf_api.c#L3381).
 Return aggregate and per-flow intervals separately. Validate interval ordering and reject
 overlap within a series; arbitrary gaps add INTERVAL_GAP and are not filled with zeros.
 

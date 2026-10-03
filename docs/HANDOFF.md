@@ -1,5 +1,447 @@
 # Implementation handoff
 
+## One/four-stream pilots and final software checks PASSED — 2026-10-03
+
+Fresh four-stream run artifacts/windows-control-9cc2360685894c3abcb5c0c38e6f5245 passed
+with the parser correction, unchanged Windows receiver flags and TCP probe. Thirty client
+epochs, zero zero-byte aggregate intervals and zero zero-window samples. Receiver data:
+3,531,079,680 bytes / 30.009372 s = 941.327 Mbit/s; 152 sender retransmits are recorded,
+not erased or interpreted as a loss percentage. Result verified, lifecycle errors empty,
+independent absence/verify/export all zero, finalizer sealed 53 files, all hashes checked.
+Together with the earlier clean one-stream control this completes the requested bounded
+hardware pilot executions under the recorded post-power/service condition. It does not
+complete a retained baseline, fault scenarios, diagnosis, overhead study or evaluation.
+
+Combined offline report: artifacts/post-power-pilot-results-20261003/report.html.
+Raw original rejected/failing runs remain unchanged. Final full Qt-required suites passed:
+564 on Python 3.12.3 in 100.83 s; 564 on Python 3.14.8 in 96.55 s. Isolated wheel/sdist
+build, lint, formatting (83 files) and whitespace checks passed. No source/test edits
+during those checks. No further traffic is needed for this bounded pilot closeout.
+
+Both canonical responses read: Claude FZ findings implemented and his tests pass;
+Gemini Round 11 interpretation mostly reconciled, with residual-location/absolute causal
+wording still too strong. Neither has yet independently approved the newly added operator
+or supplied-aggregate parser change. Owner's standing autonomous authorization permitted
+implementation and pilots; no reviewer verdict is fabricated or overwritten.
+
+Final changed implementation: scripts/diagnostic_finalize.py, scripts/windows_diagnostic.py,
+additive timing in scripts/receiver_lifecycle.py, supplied-aggregate handling in
+diaglab/traffic/parser.py. Windows helper unchanged. Contracts, roadmap, release guide,
+review log, hardware diagnostic notes and claims reflect current results. Existing Claude
+tests remain untouched. Commit commands in docs/RELEASE_CANDIDATE.md include the new files;
+owner alone commits/pushes/posts. Prior remote CI is green for 25b677a3 only; this dirty
+working tree needs its own owner commit and CI. Screenshot/post approval remains with Denis.
+
+## Four-stream parser issue corrected; final fresh retry preparing — 2026-10-03
+
+Read Claude's FZ review and Gemini Round 11 directly. FZ/LR-8 are implemented and full
+existing suites pass: 564 on Python 3.12.3 (95.51 s), 564 on 3.14.8 (91.04 s), Qt required.
+Gemini's E1/E2 observations are reconciled with the newer successful post-power control.
+His review predates SSH restoration; E2 completion did not mean uninterrupted traffic.
+Still do not accept byte residual as proof of buffer location, or one timer-removal
+experiment as excluding every possible timer interaction.
+
+Four-stream run artifacts/windows-control-a2b953288bc942a991c978a255f0d9ca transferred
+and shut down cleanly, but parsing rejected WINDOW_MISMATCH in parallel intervals.
+The first client epoch ends differ by 2–3 microseconds. ESnet iperf 3.16's reporter
+explicitly uses its first stream clock for the supplied aggregate while sampling each
+flow separately (iperf_api.c around line 3384). This is not a reason to retune numeric
+serialization tolerances or manufacture matching timestamps.
+
+Corrected _intervals to preserve supplied aggregates (bytes must sum exactly, aggregate
+window must match the first flow, all flow windows must overlap positively), flag
+PARALLEL_INTERVAL_WINDOWS_DIFFER and retain actual flow timestamps. Derivation without a
+supplied sum still requires aligned windows. Updated PHASE2_CONTRACTS.md. Development
+replay parses the real four-stream JSON; four mutations (missing sum, bad bytes, changed
+aggregate window, disjoint flow) are rejected. No original evidence or tests modified.
+Source snapshots are now included by windows_diagnostic.py for uncommitted parser/lifecycle
+provenance. Relevant existing parser/inspection/results tests are running before traffic.
+
+Claude: review FZ/LR-8/operator and author focused independent coverage for the reported
+versus derived interval distinction from the updated contract. Gemini: check the source
+semantics, per-flow timestamp preservation and post-power pilot interpretation. Neither
+assignment authorizes reviewer traffic, and no direct messages are claimed.
+
+## Post-power-change one-stream control PASSED — 2026-10-03
+
+Using repository-owned operator/finalizer, original TCP probe and receiver timer, no added
+delay: artifacts/windows-control-4104eb0b804745bb840885dc090befd8 completed and verified.
+All 30 client intervals have nonzero bytes and nonzero send window. Receiver: 3,530,686,464
+bytes / 30.004312 s = 941.381 Mbit/s, diagnostic pilot only. Lifecycle has no errors;
+independent absence, verify and export checks exited zero; finalizer sealed 50 files and
+all hashes passed. No claim that power policy alone caused prior failures: sleep setting
+and SSH service state both changed. Windows command access is currently restored.
+
+FZ + LR-8 regressions: 77 lifecycle tests passed. Full GUI-required suites on 3.12 and
+3.14 are running after the hardware control, not concurrently with traffic. Lint/format
+and whitespace pass (83 Python files). The previously authorized four-stream pilot can
+follow once these local checks finish. No additional reviewer wait is imposed by Codex.
+
+## SSH restored; FZ/LR-8 implemented; post-power-change control running — 2026-10-03
+
+Read Claude's finalization review. Accepted FZ and additive LR-8: added
+scripts/diagnostic_finalize.py, per-command and session-wait timing in receiver_lifecycle.py,
+and scripts/windows_diagnostic.py to use nested lifecycle/finalization finally blocks.
+Existing tests untouched. All 77 lifecycle tests pass, including 29 new Claude regressions;
+ruff on scripts passes. Full-suite revalidation follows the live run (avoid concurrent load).
+New operator code has development checks but is not yet independently reviewed.
+
+Mini-PC Codex changed AC sleep 600→0 seconds, retained AC hibernate=0 and the High
+performance plan, and restarted sshd. Codex verified hostname and power settings remotely.
+Read-only health evidence: artifacts/windows-health-1791045695317902903. Windows reports
+repeated Modern Standby Idle Timeout entries during the prior diagnostic period. This
+does not retroactively prove a root cause or turn E2 into valid retained performance.
+
+Under standing owner authorization, started one original-condition runner control with
+the probe and --server-max-duration 35 retained, no added hold, in the newly recorded
+power/service condition. Evidence: artifacts/windows-control-4104eb0b804745bb840885dc090befd8.
+No probe-removal comparison or four-stream traffic is being run. Await actual outcome.
+
+## Diagnostic execution closed safely; Windows SSH currently unavailable — 2026-10-03
+
+Current consolidated status: docs/HARDWARE_DIAGNOSTICS.md. E1 supports a launch-related
+timing effect; E2 completed but still stalled, so neither duration-limit removal nor any
+other fix is established. The no-probe attempt timed out at readiness and launched no
+client. Its lifecycle completed with no errors and independent listener/rule absence.
+E1/E2 later recovery/absence checks are preserved separately from original lifecycle errors.
+All 54 + 54 + 38 outer artifact hashes passed. Reports verify/export correctly; no retained
+baseline or four-stream run exists. Production code and independent tests remain unchanged.
+
+Subsequent read-only health query and two hostname checks all timed out at SSH banner
+exchange. No command channel remains to inspect or restart Windows sshd remotely. The
+last independent checks confirmed owned receiver resources gone. Do not claim a healthy
+host or root cause from these observations. No further traffic has been launched.
+
+Owner authorized autonomous continuation without reviewer waits. Codex completed
+local release checks and current release notes. Isolated wheel/sdist build passed;
+ruff check and format check passed (79 files). The initial no-isolation build failed
+because this venv lacks setuptools; standard isolated build succeeded with declared
+build dependencies. Full GUI-required local suite: Python 3.12.3, 535 passed in 91.43 s;
+Python 3.14.8, 535 passed in 83.67 s. Both used QT_QPA_PLATFORM=offscreen and
+NDPL_REQUIRE_GUI=1. No tests were skipped, rewritten or weakened by Codex.
+GitHub run 37052132024 is verified successful for committed HEAD 25b677a3; it does not
+cover the uncommitted lifecycle tooling/tests or today's documentation updates.
+
+Files updated in this continuation: README.md, docs/DECISIONS.md, docs/HANDOFF.md,
+docs/REVIEW_LOG.md, docs/RELEASE_CANDIDATE.md, publication/CLAIMS.md and
+publication/LINKEDIN_POST.md; added docs/HARDWARE_DIAGNOSTICS.md. Existing uncommitted
+lifecycle implementation and Claude tests are unchanged. Private operator/evidence files
+are ignored. Commit/push commands now select the actual follow-up files. Nothing was
+staged, committed, pushed or posted. Current code is buildable; automated hardware baseline
+and later roadmap phases remain incomplete. Windows command access is the operational
+blocker, with no reviewer response or additional owner permission currently required.
+
+## Autonomous continuation; E2 completed with pauses — 2026-10-03
+
+Owner explicitly authorized autonomous work without waiting for either reviewer.
+E2 returned completed/result_verified=true, but client traffic stopped progressing around
+9–10 s and remained at zero window for the rest of its 30 s test. Receiver duration is
+38.611165 s. Completion is not evidence that removal of --server-max-duration fixes the
+stall. E2 lifecycle again recorded session/cleanup timeouts; later independent recovery
+verified process/listener/rule absence. Raw lifecycle errors remain unchanged. Offline
+verify and export passed; 54 evidence files were sealed under outer SHA256SUMS.
+
+Started Gemini's direct-client no-probe diagnostic using original receiver flags and no
+extra hold, against the original retry condition. This is manual diagnostic evidence,
+not a production runner result. Client argv is identical to the original retry, with a
+50 s outer deadline. The alternative launch path is recorded and limits strict causal
+attribution. Production probe and helpers remain unchanged. Evidence destination:
+artifacts/diagnostic-no-probe-0016b86f36154089a3a1623bfc5b0f3e.
+
+## E1 executed; E2 in progress under owner authorization — 2026-10-03
+
+Denis instructed: "please use all suggestions and go ahead". Executed E1 once in
+artifacts/diagnostic-e1-564f8342b5844f93b509ce1849c0e33a. The recorded hold was
+20.000479233 s. Traffic again hit EXECUTION_DEADLINE_EXCEEDED, but the first zero-window
+interval moved to 10–11 s; later nonzero bytes occurred at 21–22 s. Server's last full
+interval ends at 10.003571 s, followed by 48,365,568 bytes across a long final interval.
+Do not interpolate that whole interval as uninterrupted line-rate traffic: the client
+shows a later burst. Timing supports a launch-related effect, without identifying cause.
+
+E1 lifecycle preserved errors: SESSION_WAIT_TIMEOUT, SESSION_NONZERO, CLEANUP_TIMEOUT,
+CLEANUP_NONZERO, CLEANUP_UNVERIFIED. Capture verified and the local session was reaped.
+Captured receiver cleanup reports all three true; a subsequent independent query confirms
+listener/rule absence. Do not rewrite the original cleanup_verified=false result. The
+operator stopped on its post-cleanup assertion; Codex completed verify/export and outer
+checksums offline after the interruption. All outer hashes match; report remains failed
+with unavailable performance metrics. No raw evidence was overwritten.
+
+Following Claude's conditional E2 suggestion, started one run with the same 20 s delay
+and only the receiver --server-max-duration 35 argument removed. Private helper hash:
+051967e5e60ced5dfcaf6a349d25058e96fff0e6fa5cd50430107b70efb56697. Production helper,
+runner and tests unchanged. Evidence destination:
+artifacts/diagnostic-e2-1a86293ec282450795c9e73071c310d1. Client deadline, probe, single
+stream, 30 s duration and lifecycle safeguards remain. E2 outcome is not yet known.
+
+Claude: inspect E1 timing and timeout/capture separation. Gemini: inspect E1 without
+claiming a precise stall from the combined final server interval. Both update canonical
+files; no new traffic by reviewers. Probe elimination remains a separate possible branch.
+
+## Gemini Round 10 reconciled — E1 remains the next proposed experiment — 2026-10-03
+
+Read Gemini's updated canonical review. Both reviewers confirm failed traffic and
+successful lifecycle handling. Gemini highlights additional differences from manual
+readiness: no TCP probe, one-off receiver mode and a different server duration limit.
+These make the manual run useful counter-evidence, but not a single-variable control.
+
+Choose Claude's E1 (20 s start delay) first: it retains the reviewed runner's required
+pre-connect probe and changes only orchestration timing. Gemini explicitly accepts this
+ordering. Keep probe elimination as a possible subsequent diagnostic condition, not a
+production preflight removal or an already-authorized second experiment.
+
+Corrections requested from Gemini in its own canonical file:
+- One success cannot prove probe-induced state corruption; one failure cannot conclusively
+  exclude every probe interaction. Outcomes support or weaken hypotheses.
+- Successful cleanup does not exclude all effects of launch context or wrapper timing.
+- Receive-window/RTT correlation does not establish queue location or causation; zero
+  recorded retransmits does not conclusively exclude every loss/link issue.
+- The timing table is internally inconsistent: 2.374 + 28.27 is 30.644, not 31.36;
+  1.714 + 29.17 is 30.884, not 31.17. Reconcile raw timestamp sources and resolution
+  with Claude's estimates before asserting subsecond launch alignment.
+- The manual sender/receiver counts printed in the table differ by 1,310,720 bytes,
+  despite its zero residual row. Distinguish sender totals from matching receiver-side
+  reports and identify the exact fields compared.
+
+These corrections concern interpretation, not a newly demonstrated production defect.
+No code/test edits or new traffic occurred during this reconciliation. E1's large delay
+can discriminate coarse timing despite the unresolved subsecond estimates.
+
+## Claude retry review received; Gemini analysis pending — 2026-10-03
+
+Read Claude's current diagnostic-retry verdict directly. He independently verified the
+failed traffic, successful lifecycle, immutable evidence and suppressed report metrics.
+No new production defect or test change was requested; prior software approvals stand.
+
+Claude estimates stalls at 31.36 s and 31.17 s after receiver launch using Windows-side
+timestamps and partial-interval byte counts. These are estimates from two runs, not a
+proven timer or root cause. Gemini should check timestamp precision and the assumptions
+behind interpolation as well as the proposed launch-versus-test anchoring interpretation.
+
+Proposed E1 changes only orchestration timing: hold 20 s after READY and the separate
+identity check, then execute one otherwise unchanged 30 s single-stream run. A stall
+around 8–10 s into traffic would support launch anchoring; around 28–29 s would support
+test/probe anchoring; success would require treating intermittency as a possibility.
+Preserve the reviewed helper, versions, receiver flags, probe and runner budgets. Record
+hold start/end timestamps and actual elapsed monotonic time. Stop after one run, retain
+all evidence, and keep four streams deferred. No new traffic has been run or launched
+by this review reconciliation; await Gemini's methodological check before proceeding.
+
+## Active reviewer assignments reconfirmed — 2026-10-03
+
+Denis reconfirmed Gemini is available. Both existing reviewer sessions are active;
+Claude retains independent test ownership. Their current verdicts still cover the
+no-traffic dry run, not the subsequent failed diagnostic retry described below.
+
+- Claude: verify the latest retry's runner deadline, signal handling, lifecycle cleanup
+  and evidence integrity. Identify any code defect or confirm the distinction between
+  failed traffic and successful lifecycle handling. Recommend the smallest controlled
+  next experiment. Update ../ndpl-private/CLAUDE_PLAN_REVIEW.md in place.
+- Gemini: compare the original failed pilot and diagnostic retry timelines against the
+  earlier successful manual readiness run. Separate observed facts from hypotheses;
+  check whether probe behavior, persistent versus one-off receiver operation, or another
+  documented difference suggests a discriminating experiment. Do not infer root cause
+  from the zero-window observation alone. Recommend one experiment with its changed
+  variable and expected distinguishing outcomes. Update ../ndpl-private/GEMINI_PLAN_REVIEW.md
+  in place; correct the stale test-authoring role in its header.
+
+This is a read-only review assignment, not authorization for additional traffic, host
+changes or test edits. Codex will reconcile both recommendations and implement accepted
+corrections. No new code, measurements or checks were produced by this role update.
+
+## Reviewed one-stream diagnostic retry recorded — 2026-10-03
+
+Read both canonical dry-run verdicts: Claude closed W3/W4 and G2 evidence gate; Gemini
+independently confirmed the same. Proceeded under Denis's recorded authorization with
+exactly one 30-second single-stream retry. Same iperf versions, duration/omit/budgets,
+host settings and reviewed helper (cea61667...7059); only receiver lifecycle changed.
+Private evidence: artifacts/diagnostic-retry-3321a3038a39425cb5aa53db9ed579e0.
+
+Traffic again failed with EXECUTION_DEADLINE_EXCEEDED (CLI exit 3). Integrity verification
+passes with state failed, transfer_completed false, result_verified false. New client
+last full interval is 28.001014–29.000988; its later 30.001279–48.939298 interval records
+zero bytes and zero send window. Server final interval spans 29.011435–49.022778 and
+ends with a control-message connection-reset error. A successful throughput result is
+not established; report metrics remain unavailable. Four-stream traffic was not started.
+
+Unlike the first pilot, lifecycle_errors is empty: cleanup_verified, evidence_verified
+and local_session_reaped are all true. Stop/Cleanup/Capture exited 0 with no timeout or
+overflow. Independent final check confirms listener/rule absence. All 53 outer evidence
+checksums passed. Original traffic_failure remains separate from the successful lifecycle.
+No production code or tests changed. The lifecycle correction does not resolve the stall.
+
+Claude: verify runner versus lifecycle outcomes and timing in the new evidence; propose
+the smallest next controlled receiver experiment, not another unchanged retry. Gemini:
+compare the two partial timelines without inferring buffer location, packet loss or
+successful throughput. No changes to versions/power settings or new traffic authorized
+by this assignment. Update existing canonical review files; no direct messaging claimed.
+
+## Windows no-traffic lifecycle validation PASSED — 2026-10-03
+
+After Denis restarted Windows sshd, resumed the authorized validation with a fresh token.
+Evidence: ignored artifacts/receiver-dryrun-dc9a402b99ee439886ca1eb9edf697d6.
+Exact helper bytes were copied by SCP; remote SHA-256 matched local, and the Windows
+PowerShell parser reported zero errors. Start reached READY without any client or probe.
+A separate SSH session verified the owned listener, process path, decimal-string creation
+ticks (W3), and helper hash. Captured receiver-owner.json also matched the local helper hash.
+
+finish_session returned lifecycle_errors [], cleanup_verified true, evidence_verified
+true, local_session_reaped true, missing_files []. Stop/Cleanup/Capture each exited 0,
+without timeout or overflow. Independent final check confirmed rule and listener absent.
+All required receiver files were captured and verified against receiver-computed hashes.
+No throughput traffic, host tuning, version change or four-stream run occurred.
+
+Claude: verify this dry-run lifecycle/evidence and close W3 if satisfied; W4's conservative
+same-executable capture guard is included in the deployed bytes. Gemini: confirm evidence
+semantics and unchanged diagnostic-retry scope. No new tests/code changes in this turn.
+Next is the already proposed single 30-second one-stream diagnostic retry once this
+evidence gate is closed. Owner's instruction to proceed is recorded; no repeat blanket
+approval request is needed. Four streams remain deferred; this dry run is not a benchmark.
+
+## G2 no-traffic validation attempted — 2026-10-03
+
+Read Claude's W1/W2 resolution and no-traffic dry-run approval. Applied recommended W4:
+Capture refuses any live process at the recorded PID with the receiver executable path,
+even when ticks differ; ambiguity cannot permit hashing live receiver logs. Python and
+independent tests unchanged. W3 remains a Windows-runtime check, despite Gemini's broader
+resolved wording. Owner explicitly authorized proceeding with remaining approvals/tasks.
+
+Prepared the concrete copy/hash/parse/Start/READY/Stop/Cleanup/Capture operator sequence,
+including a separate-session identity check and independent final absence check. Attempt
+is preserved under ignored artifacts/receiver-dryrun-af86a399cf8e45cab962fff9a1c0744a.
+Initial read-only SSH environment query timed out after 70 seconds, before any helper
+deployment or remote mutation. Follow-up SSH connects to TCP 22 but times out during
+banner exchange. Windows answers 3/3 pings. No receiver, rule or throughput traffic started.
+Remote command access must recover before validation can proceed. No approval inferred
+for W3, no cleanup claim needed for this pre-deployment attempt. Existing raw pilot intact.
+
+## G2 reviews reconciled; Windows edge cases corrected — 2026-10-03
+
+Claude approves the Python lifecycle and reports 48 LC cases, 535 full-suite passes per
+runtime. Gemini approves methodology. Its 46-case count is stale; its assertion that
+the 240-second loop guarantees cleanup after permanent SSH loss is too strong. The loop
+depends on the remote wrapper remaining alive/responsive. Independent recovery is needed.
+
+Accepted W1/W2. Updated windows_receiver.ps1: Capture refuses only the matching live
+PID/start-ticks/executable identity, not a reused PID. Before launching, persist
+launch_attempted; a null identity after attempted launch is unverified, not process_gone.
+Start retains the process object for finally cleanup if identity persistence fails.
+Creation ticks now serialize as strings (W3 still requires Windows round-trip validation).
+Owner evidence records the deployed script SHA-256; deployment must compare local and
+remote hashes before Start. No changes to approved Python code or reviewer tests.
+Codex reran the independent lifecycle suite: 48 passed in 20.64 s; whitespace check clean.
+This validates the Python paths, not PowerShell syntax or Windows behavior.
+
+Claude: re-review W1/W2 changes and deployment/identity documentation. Gemini: confirm
+measurement/lifecycle semantics and correct stale test count and watchdog guarantee.
+Neither review authorizes new traffic. Next operational step is a no-payload Windows
+Start/READY/Stop/Cleanup/Capture validation, including a separate-session identity check,
+before the single-stream diagnostic retry. No Windows execution occurred in this turn.
+
+## G2 implementation delivered for independent review — 2026-10-03
+
+Owner said go ahead with the lifecycle correction. Added docs/RECEIVER_LIFECYCLE.md,
+scripts/receiver_lifecycle.py and scripts/windows_receiver.ps1. Operator tooling remains
+separate from diaglab.run; no traffic-runner behavior or tests were changed by Codex.
+
+Python API: start_session(argv) and finish_session(session, stop_argv=..., cleanup_argv=...,
+capture_argv=..., output=..., traffic_failure=...). It owns local process groups, drains
+bounded output, records original traffic failure separately, and independently attempts
+stop, wait/reap, ownership-checked cleanup and hash-checked capture. Shutdown timeout,
+nonzero commands, missing evidence and local output failure cannot skip the later steps.
+Windows helper uses Start/Stop/Cleanup/Capture actions, preloads networking modules,
+verifies PID/start-time/executable and firewall scope, bounds receiver lifetime and emits
+receiver-computed hashes. Outputs remain private. No new public CLI or GUI controls.
+
+Development checks: local fake-process normal completion, stalled-session timeout and
+missing receiver evidence all behaved as specified; cleanup/capture ran after timeout,
+traffic failure survived and local sessions were reaped. Ruff and whitespace checks pass.
+These are Codex smoke checks, not independent regressions. PowerShell is not installed
+locally: Windows syntax/runtime and process semantics still require review/validation.
+The helper has NOT been executed on Windows or used for traffic. No benchmark claim.
+
+**Claude:** read RECEIVER_LIFECYCLE.md before implementation; author independent tests
+for G2 (fake SSH timeout, missing files, invalid hashes, command failures, output failures,
+ownership and child cleanup), then review Python and PowerShell. Preserve existing tests.
+Use the API as documented or raise contract disagreements; update your canonical file.
+**Gemini:** reconcile the evidence corrections in the section below and review lifecycle
+status/evidence semantics plus the proposed single-variable diagnostic retry. No new traffic.
+Both assignments are file-based; Codex has not contacted replacement sessions.
+
+Next gate: both scoped reviews and independent lifecycle regressions, then prepare the
+concrete one-stream retry for owner approval. Four-stream traffic remains deferred.
+
+## Hardware review reconciliation — 2026-10-03
+
+Read both current canonical findings against captured events, Windows inventory, command
+outcome and runner stop code. Accept Claude G1/G2. No production runner correction is
+indicated. The observed zero window and long receiver interval support receiver-process
+non-progress; they do not prove a particular deadlock, throttling cause, or eliminate
+every OS/scheduling/link contribution. No new traffic is authorized by this review step.
+
+G1: Claude added PRB-01–04 in tests/integration/test_probe_server.py and updated his test
+catalog. His full-suite report is 487 passing per runtime. Tests remain Claude-owned.
+G2: Codex's operator shutdown wait could bypass subsequent evidence collection and
+verification on timeout. Accept this as an operator lifecycle defect; actual cleanup
+was independently verified afterward. Correct the operator, not the traffic runner.
+
+**Gemini corrections requested in its own canonical file:**
+- Windows inventory identifies a Realtek Gaming 2.5GbE controller, not Intel I211/I219-V.
+- TRAFFIC_STARTED is 06:08:24.551574Z, RUN_FAILED is 06:09:14.586712Z. The recorded
+  04:54:33 UTC start is unsupported; monotonic timestamps are not UTC timestamps.
+- Runner stop sends SIGTERM first and escalates only if needed. The client's handled
+  interruption and exit 1 do not support the asserted SIGKILL. RT-09 must not require it.
+- The 4 MiB endpoint byte difference is arithmetic, not proof of ACK status or which
+  buffer held bytes. Zero retransmits does not establish zero packet drops. Link-speed
+  asymmetry alone does not establish the cause of the receiver's application stall.
+- Codex executed the ownership-checked recovery, not Denis. windows-stop.ps1 requested
+  shutdown with a sentinel; the retained receiver wrapper owned process/rule cleanup.
+- The actual verification command uses --run, not --target. Recheck inspection field
+  names against the API before describing them as independently observed output.
+
+Next: Codex proposes a reviewed, repository-owned receiver lifecycle before any retry.
+It must preserve the original traffic failure, separately record lifecycle failures,
+attempt evidence collection and cleanup verification even after shutdown timeouts, reap
+owned local SSH processes, preload Windows networking modules and hash receiver evidence.
+Claude reviews the contract and authors timeout/missing-file/ownership regressions.
+Gemini corrects factual statements and reviews the diagnostic design. A first diagnostic
+retry should change only lifecycle handling, retain versions/settings, and defer the
+four-stream run. Any version/power-setting/interactive-start comparisons are separate
+conditions, not simultaneous changes or established fixes. No reviewer verdict rewritten.
+
+## Authorized hardware pilot attempted — 2026-10-03
+
+Denis explicitly approved running baseline tests. Scope chosen: one 30-second single-stream
+and one 30-second four-stream forward TCP pilot, omit 0, no faults or tuning. Used the
+reviewed runner at source revision 25b677a. SSH ED25519 fingerprint matched the owner's
+previously verified value. Windows remained on a 1 Gbps link; Ubuntu reported 10 Gbps/full.
+The first attempt stopped at SSH preflight with no traffic or receiver changes.
+
+The fresh attempt created a persistent Windows receiver and a uniquely named temporary
+firewall rule scoped to the two peer addresses, TCP 5201 and Ethernet 4. The single-stream
+client transmitted, then stalled and hit EXECUTION_DEADLINE_EXCEEDED (exit 3). Four-stream
+traffic was not started. Raw client intervals show zero send window near the end; server
+evidence records a control-message connection abort. Root cause is not established.
+Do not interpret partial bytes/rates as a successful throughput measurement.
+
+Run integrity verifies (exit 0) with state failed, transfer_completed false and
+result_verified false. Exported report correctly has all-null metrics. The receiver SSH
+wrapper exceeded its 30-second shutdown wait; a separate ownership-checked recovery
+confirmed process_gone, listener_gone and rule_gone all true. No host tuning changed.
+Artifacts, operator scripts, inventory, configs, execution logs and recovery evidence
+are private under ignored artifacts/baseline-e6664bf6648c41628def4f9f3293e089; the
+earlier SSH-only preflight is in artifacts/baseline-683e09930d8c49f1841e9a3a10d8c86c.
+The failed run was opened in the GUI. No production code or independent tests changed.
+
+**Claude next:** inspect the private failed-run and receiver lifecycle evidence; identify
+whether runner/receiver orchestration needs a correction and specify an independent
+regression before any production fix. Update your canonical file; no new traffic.
+**Gemini next:** inspect timing, sender/receiver observations and report suppression;
+check the failure interpretation without promoting partial data to measured goodput.
+Update your canonical file; route test requests to Claude. These are file handoffs only.
+
+Remaining: diagnose the hardware stall, then resume the approved bounded pilots with a
+concrete correction. No successful hardware baseline or complete Phase 0 closure claimed.
+
 ## CI runtime dependency fix — 2026-10-02
 
 Inspected Actions run 37048273621 for commit 1423ce4. Both offline jobs passed.

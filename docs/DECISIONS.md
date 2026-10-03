@@ -1,5 +1,42 @@
 # Decisions
 
+## 2026-10-03 — Windows AC sleep disabled by owner; SSH restored
+
+The owner supplied the mini-PC Codex report: active High performance plan
+8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c unchanged; AC sleep changed from 600 s to 0,
+AC hibernate remained 0; sshd restarted and running automatically. Original settings
+are saved at C:\\Users\\Denis\\network-diagnostics-power-original.txt on Windows.
+Restore on the same active plan with `powercfg /change standby-timeout-ac 10` and
+`powercfg /change hibernate-timeout-ac 0`. No battery/NIC/TCP/firewall changes were reported.
+Codex independently verified SSH hostname, active plan and zero AC timeouts. System events
+show repeated Modern Standby entries due to Idle Timeout during the diagnostic period;
+this is a lead, not proof that every stall had the same cause. Further runs record the
+changed power condition and SSH restart rather than comparing them as unchanged controls.
+
+## 2026-10-03 — autonomous continuation authorized
+
+Denis granted full operational approval while unavailable and instructed Codex to
+continue alone without waiting for other agents. This supersedes reviewer-wait gates
+for the current diagnostic/remediation work. Historical independent verdicts remain
+attributed to their authors; Codex's new work must not be described as independently
+reviewed. Preserve raw evidence and verify cleanup. Existing owner-only commit, push
+and publication boundaries remain unchanged.
+
+## 2026-10-03 — owner reconfirms Gemini is active
+
+Denis explicitly confirmed "gemini is available!", superseding the inactive-Gemini
+instruction supplied earlier in this session. The on-disk AGENTS.md two-reviewer roles
+remain current: Claude owns independent tests and code/safety review; Gemini provides
+independent methodology, arithmetic, interpretation and GUI review. Coordinate through
+their existing canonical files, not replacement agents or claimed direct messages.
+
+## 2026-10-03 — bounded hardware pilots authorized
+
+Denis approved running the proposed baseline tests. Codex scoped this to one 30-second
+single-stream and one 30-second four-stream forward TCP pilot with no faults or tuning.
+Stop on a failed run, preserve raw evidence and verify receiver cleanup. These are
+exploratory pilots, not the repeated retained campaign or permission to publish claims.
+
 ## 2026-10-02 — results reporting and post drafting
 
 Denis requested work on a results tool and final post. Codex's initial interpretation is

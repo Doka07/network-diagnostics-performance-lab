@@ -36,7 +36,8 @@ Phase 2 also supports offline planning and integrity verification:
 
 Live baseline traffic requires explicit `--execute`, an approved pilot configuration and
 a persistent manually started receiver. See the runbook before execution. Collectors,
-fault application, diagnosis and reporting remain later phases.
+fault application and automatic diagnosis remain later phases. Saved-run reporting is
+available now; see below.
 
 ## Offline desktop viewer
 
@@ -51,7 +52,9 @@ The viewer provides dark/light themes, interval charts, searchable flow tables a
 evidence links. It does not start traffic or modify evidence. See the
 [preview gallery](docs/mockups/index.html) for screenshots using explicitly synthetic data.
 Claude and Gemini approved the GUI and results release, including the corrected preview.
-Owner acceptance and updated remote CI remain release gates.
+That release is committed at `25b677a3` with passing remote CI. The receiver-lifecycle
+follow-up and current [hardware diagnostic status](docs/HARDWARE_DIAGNOSTICS.md) are
+separate from the released offline viewer.
 See the [desktop viewer guide](docs/GUI_GUIDE.md) for statuses, controls and evidence links.
 
 ## Saved-run results report

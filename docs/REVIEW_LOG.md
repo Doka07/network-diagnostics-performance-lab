@@ -1,5 +1,116 @@
 # Review log
 
+## 2026-10-03 — final local verification after parser correction
+
+Codex reran all existing tests with Qt required after final traffic: 564 passed on
+Python 3.12.3 (100.83 s), 564 on 3.14.8 (96.55 s). Lint, formatting (83 files), whitespace
+and isolated wheel/sdist build passed. Combined private report exports both clean pilots.
+No tests weakened or raw evidence changed. New parser/operator code still lacks a fresh
+independent reviewer verdict; owner retains commit/push/publication. Prior green CI covers
+25b677a3, not the uncommitted changes. Full experimental roadmap remains beyond this milestone.
+
+## 2026-10-03 — four-stream reporter semantics corrected; fresh pilot passed
+
+Real four-stream iperf output exposed an unconditional shared-window check on supplied
+interval totals. Upstream iperf_api.c uses the first flow's clock for its supplied sum.
+Preserve that sum and actual flow windows, flag differences and require exact bytes,
+first-flow aggregate timing, positive overlap and per-series ordering. Derived aggregates
+still require aligned windows; no numeric tolerance changed. Updated Phase 2 contract.
+Real JSON replay and four invalid-data mutations passed development checks; 139 existing
+parser/inspection/results tests passed. Claude's independent targeted regressions/review
+are requested in HANDOFF.md; existing tests were not edited.
+
+Fresh four-stream pilot completed with no zero-byte aggregate epochs or zero-window
+samples. Lifecycle/absence/verify/export all passed and all 53 hashes match. Original
+rejected run remains intact (49 hashes). One-stream and four-stream pilot reports are
+combined privately, not published or accepted as a retained performance benchmark.
+
+## 2026-10-03 — Claude FZ/LR-8 implemented; clean post-change control
+
+Accepted Claude's finding that per-run operators skipped finalization while G2 itself
+behaved correctly. Added diagnostic_finalize.py and timing fields; 77 independent
+lifecycle/FZ tests pass without edits. Added windows_diagnostic.py as the explicit
+repository-owned checkout operator. Its live one-stream control completed without pauses
+after owner-reported AC sleep disable and SSH restart. Lifecycle, independent absence,
+verification, export and all 50 outer hashes passed. New operator implementation and
+live outcome are Codex-validated, not yet independently reviewed. Prior failures remain
+intact; see HARDWARE_DIAGNOSTICS.md for the confounded power/service change and pilot limits.
+
+## 2026-10-03 — local follow-up release checks completed by Codex
+
+Full existing suite with NDPL_REQUIRE_GUI=1 and offscreen Qt: 535 passed on Python 3.12.3
+(91.43 s), 535 on 3.14.8 (83.67 s). Ruff check, formatting check (79 files), whitespace
+check and standard isolated wheel/sdist build pass. Remote CI run 37052132024 is green
+for existing HEAD 25b677a3 only. Updated README, release instructions and publication
+claims to separate that released software from the uncommitted lifecycle follow-up and
+unresolved hardware diagnostics. No independent test changed; no commit/push/publication.
+
+## 2026-10-03 — owner-authorized autonomous E1/E2 diagnostics recorded
+
+Codex executed the start-delay and duration-flag experiments separately, preserving raw
+data, lifecycle failures and later cleanup checks. E2 completed but still exhibited long
+pauses; no root-cause fix is claimed. Probe-elimination attempt launched no client after
+readiness timeout. All three bundles passed checksum verification. Windows SSH later
+became unavailable at banner exchange. See HARDWARE_DIAGNOSTICS.md for exact outcomes.
+These are Codex execution checks, not additional Claude/Gemini approvals. Owner explicitly
+waived waiting for further agent help. No production code or existing tests were edited.
+
+## 2026-10-03 — Gemini comparative review reconciled with Claude
+
+Both reviewers agree that the retry's traffic failed while lifecycle handling succeeded.
+Selected the proposed 20 s start-delay experiment before considering probe elimination;
+production preflight remains intact. Requested corrections to Gemini's causal certainty,
+inconsistent launch-offset arithmetic and manual byte-residual field comparison in its
+own canonical file. Detailed reconciliation is in HANDOFF.md. No new traffic executed.
+
+## 2026-10-03 — Claude independently verifies the diagnostic retry
+
+Claude confirmed failed traffic and successful lifecycle handling as separate outcomes,
+with no new code defect. He proposes a 20 s receiver-to-client start delay to distinguish
+launch-anchored from test/probe-anchored stalling. The timing interpretation is provisional
+(two runs and interpolated stall times); Gemini's independent analysis remains pending.
+No code, tests or experiment settings changed in this reconciliation.
+
+## 2026-10-03 — dry-run approval reconciled; bounded diagnostic retry completed
+
+Both reviewers closed W3/W4 and the lifecycle evidence gate. The owner-authorized
+one-stream retry again hit the runner deadline, while the reviewed lifecycle verified
+cleanup and capture with zero errors. All 53 evidence checksums passed. No throughput
+claim or four-stream execution. Evidence and follow-up assignments are in HANDOFF.md.
+
+## 2026-10-03 — Windows lifecycle runtime validation completed
+
+After the owner's SSH-service restart, the no-traffic Start/READY/Stop/Cleanup/Capture
+sequence passed on Windows. Separate-session creation-tick string/path identity checks
+and deployed/captured helper hashes matched. Cleanup and capture verified, no lifecycle
+errors, and independent final rule/listener absence confirmed. Evidence is referenced
+at the top of HANDOFF.md for Claude's W3 closure and Gemini's interpretation review.
+
+## 2026-10-03 — G2 Python approved; Windows findings remediated for re-review
+
+Claude's 48 independent lifecycle cases cover the timeout/capture correction and report
+535 total passing tests per runtime. Accepted W1/W2: protect capture against PID reuse
+and avoid claiming cleanup when launch identity was not persisted. Record ticks as
+strings and deployed-helper hash. W3 and Windows runtime behavior need a no-traffic
+validation after code re-review. Gemini methodology approval stands; stale counts and
+unconditional watchdog guarantees were flagged in HANDOFF.md. No new traffic.
+
+## 2026-10-03 — G2 receiver lifecycle correction ready for review
+
+Codex supplied the receiver-lifecycle contract and repository operator helpers. Timeout
+and output failures do not bypass independent cleanup/capture attempts; original traffic
+failure remains separate. Local development smoke checks passed; Claude's independent
+regressions and Windows helper review remain pending. No new LAN experiment executed.
+
+## 2026-10-03 — failed hardware pilot reviews reconciled
+
+Accepted Claude's probe coverage additions and operator cleanup/evidence-path finding.
+Production runner behavior matches its contract. Receiver non-progress is supported;
+its internal cause remains unknown. Gemini's agreement on failed-result suppression
+stands, but NIC identity, UTC timing, signal attribution, buffer/ACK claims, recovery
+attribution and API descriptions require correction in its canonical review. Details
+and next assignments are at the top of HANDOFF.md. No LAN traffic or production edits.
+
 ## 2026-10-02 — remote GUI CI environment correction
 
 Run 37048273621: core jobs passed, GUI collection failed because Qt could not load
