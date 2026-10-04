@@ -164,6 +164,9 @@ class Harness:
     def start(self, behavior: str = "normal"):
         session = lifecycle().start_session(self.argv("session", behavior))
         self.wait_for_file("session.pid")
+        # The fake writes session.pid before spawning its grandchild: wait for both, or a
+        # slow runner reads the grandchild's PID file before it exists (CI 37178638100).
+        self.wait_for_file("session.grandchild.pid")
         self.spawned.append(self.pid("session.pid"))
         self.spawned.append(self.pid("session.grandchild.pid"))
         return session

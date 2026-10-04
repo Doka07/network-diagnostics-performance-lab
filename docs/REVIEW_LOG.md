@@ -1,5 +1,20 @@
 # Review log
 
+## 2026-10-04 — CI fixture startup race identified and targeted fix verified
+
+CI run 37178638100 at 07113aa failed in offline-checks (3.14): four lifecycle
+cases read session.grandchild.pid before the fake process wrote it. The fixture waited
+only for session.pid, which is created earlier. Both GUI jobs passed; offline 3.12 was
+cancelled. All 17 PX parser cases passed in the failing job.
+
+A concurrent change appeared in Claude-owned tests/lifecycle/conftest.py adding the
+existing bounded wait_for_file for session.grandchild.pid before reading it. Codex did
+not author or edit this test change. It preserves all assertions and lifecycle deadlines.
+Codex independently verified all 77 lifecycle/finalizer cases pass on Python 3.12.3
+(27.89 s), plus targeted lint/format and diff checks. Fresh remote CI is still required.
+No production changes or Windows access. Owner commits the fixture fix and these records,
+then pushes; do not treat rerunning the old commit as containing the fix.
+
 ## 2026-10-04 — final reviews reconciled; ready for owner commit
 
 Read both canonical review files directly. Claude approves the finalizer, LR-8 lifecycle
