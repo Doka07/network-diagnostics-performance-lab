@@ -1,5 +1,44 @@
 # Review log
 
+## 2026-10-04 — final reviews reconciled; ready for owner commit
+
+Read both canonical review files directly. Claude approves the finalizer, LR-8 lifecycle
+fields, Windows operator and parser, with no blockers. His 17 new PX cases reproduce the
+old failure and guard the supplied-versus-derived aggregation contract; tests and his
+README entry are unchanged by Codex. Claude reports 581 passing on Python 3.12.3 and
+3.14.8. Codex independently reran the full Qt-required suite on Python 3.12.3 today:
+**581 passed in 100.63 s**, no skips. Ruff check and format check pass (85 files).
+Python 3.14 was not rerun by Codex today; its latest 581 result is Claude's check.
+
+Gemini Round 12 verifies pilot arithmetic and approves the publication briefing with
+pilot labels and screenshot redactions. Codex does not adopt its stronger buffer-location,
+buffer-size/RTT or definitive timer/standby explanations: these are not established by
+the evidence. Both successful pilots remain single observations; no retained benchmark.
+
+Corrected CHATGPT_CANVA_BRIEF.md's audit attribution, commit-specific test counts and
+independent review status; added public repository/CI/source links and known limitations.
+Updated CLAIMS.md, RELEASE_CANDIDATE.md and lifecycle documentation, retaining the GUI
+guide correction. Missing SHA256SUMS overrides a sealed status; an existing finalization
+returns without rerunning checks. New maximum-skew bounds, operator injection/test seams
+and rare interruption-window hardening remain nonblocking future work; no contract or
+production code is changed for this closeout. Current power label is operator-supplied,
+not fresh telemetry. See the briefing for public claim limits.
+
+No new traffic, Windows access, raw-evidence modifications, reviewer-file edits, staging,
+commit, push or publication. Windows may remain disconnected. Owner next steps:
+execute RELEASE_CANDIDATE.md's explicit commit/push commands, confirm all four CI jobs
+for the new commit, then use the briefing in ChatGPT/Canva and approve the final visual.
+Earlier "pending review" and "564 current tests" entries below are historical.
+
+## 2026-10-03 — published commit/CI verified; publication briefing assembled
+
+Commit 45404309 has green offline and GUI jobs on Python 3.12/3.14 (run 37139253231).
+Prepared CHATGPT_CANVA_BRIEF.md from reverified saved artifacts, with exact metrics,
+pilot limitations and explicit separation of real GUI evidence from synthetic mockups.
+Launched and visually inspected the actual desktop GUI with the four-stream pilot.
+Assigned final code/test-claim review to Claude and arithmetic/visual-claim review to
+Gemini through HANDOFF.md. No fresh reviewer approval claimed; no network tests or posting.
+
 ## 2026-10-03 — final local verification after parser correction
 
 Codex reran all existing tests with Qt required after final traffic: 564 passed on

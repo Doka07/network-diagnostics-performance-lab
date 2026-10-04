@@ -75,7 +75,9 @@ remains read-only. It adds the documented synthetic banner for the screenshots.
 
 ## Current limits
 
-This release candidate is an offline inspector, with no live controls, telemetry collectors,
-fault injection, automated diagnosis, comparison or export. The testbed has no retained
+The GUI is an offline inspector, with no live controls, telemetry collectors,
+fault injection, automated diagnosis or in-GUI comparison/export. The separate
+`diaglab results` CLI exports saved runs to HTML/JSON, including multiple individual runs.
+The testbed has no retained
 performance campaign yet. See [the current handoff](HANDOFF.md) for independent reviews,
 validation versions and remaining phase/CI gates.

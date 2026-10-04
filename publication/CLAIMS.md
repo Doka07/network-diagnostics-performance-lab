@@ -1,6 +1,7 @@
 # Draft claim review
 
-No quantitative performance claim is accepted. This ledger supports the software milestone
+No retained benchmark or performance-improvement claim is accepted. The two recorded
+pilot observations may be described explicitly as pilots, one per condition. This ledger supports the software milestone
 draft in LINKEDIN_POST.md. Posting and final wording require Denis's approval.
 
 | Draft statement | Evidence / verification | Status and limit |
@@ -12,13 +13,20 @@ draft in LINKEDIN_POST.md. Posting and final wording require Denis's approval.
 | Warm-up separated; zero distinct from missing | CHART-1, SHIFT-1, ZERO-1 and missing-data tests | Report/chart behavior; not experimental conclusions |
 | Failed/interrupted evidence and independent statuses | AUD-02/03, FAIL-1; GUI contracts | Checksums detect changes against references, not authentic origin |
 | Child signal inheritance finding and correction | AUD-01 regressions, run.py and reviewer history | Reproduced with fake processes; no live performance inference |
-| Python 3.12/3.14 local validation | Original GUI/results release: 483 tests per runtime; follow-up includes Claude's 77 lifecycle/finalization cases; Codex reran 564 on each of 3.12.3 and 3.14.8 with Qt required | Committed 25b677a3 has green CI (run 37052132024); uncommitted follow-up needs fresh CI; current rechecks in HANDOFF.md |
-| Screenshots are synthetic | docs/mockups/generate.py, generate_results.py and visible banners | Results preview uses fake-process pilot fixtures with a preview-only synthetic banner; never measurement evidence |
+| Python 3.12/3.14 validation | 564 cases per runtime at commit 45404309; green CI run 37139253231. Claude added 17 PX cases and reports 581 passing per runtime | New tests await owner commit and fresh CI; runtime repetitions are not distinct test cases |
+| Synthetic previews and real screenshot | docs/mockups has synthetic banners; artifacts/gui-demo-20261003.png shows the real four-stream pilot | Label each accurately; redact paths/endpoints from public screenshot while retaining flags |
+| One/four-stream pilot receiver goodput | 941.381 / 941.327 Mbit/s; exact bytes/durations in CHATGPT_CANVA_BRIEF.md, independently checked by Gemini | One 30-second observation per condition; no speedup, statistical significance or retained benchmark claim |
 | Hardware baseline and telemetry remain open | docs/MASTER_PLAN.md, docs/HARDWARE_DIAGNOSTICS.md | Diagnostic runs exist but do not establish a retained baseline; telemetry remains future work |
 
-Independent GUI/results review is complete and the described functionality is in the
-green-CI commit 25b677a3. Before posting, Denis approves final wording and screenshot;
-verify that the screenshot retains its synthetic label. Do not attribute uncommitted
-lifecycle additions or new diagnostic checks to that commit's CI.
-No claim of automated root-cause diagnosis, packet capture, RDMA/RoCE, InfiniBand, production
-scale, validated accuracy, overhead measurement or measured speedup is supported yet.
+Claude's final 2026-10-03 code review approves the finalizer, lifecycle timing, operator
+and parser with no blockers. Gemini's Round 12 independently verifies pilot arithmetic
+and approves the briefing subject to pilot labels and screenshot redactions. Some causal
+explanations in that review remain stronger than the evidence; they are not adopted:
+byte residuals do not locate buffers or prove discard, and neither a buffer-size cause
+for RTT nor a single cause for earlier stalls is established.
+
+Denis approves the final ChatGPT/Canva text and visual. See CHATGPT_CANVA_BRIEF.md for the
+complete publication handoff and source links. Do not attribute uncommitted additions to
+an earlier commit's CI. No claim of automated root-cause diagnosis, packet capture,
+RDMA/RoCE, InfiniBand, production scale, validated accuracy, overhead measurement or
+measured speedup is supported.

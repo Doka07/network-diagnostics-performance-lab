@@ -18,6 +18,15 @@ fixtures and their provenance under `tests/fixtures/iperf3/` were prepared by Ge
   classification, nonfinite numbers, 1/4-stream aggregation without double counting.
 - `TC-U-06` (`tests/unit/test_traffic_parser.py`): RTT presence/unavailability, omit
   metadata and omitted/retained split, goodput and rate-tolerance arithmetic.
+- `PX-01–10` (`tests/unit/test_parallel_intervals.py`, contract-first from the updated
+  PHASE2_CONTRACTS.md): reported versus derived parallel aggregates. Covered:
+  - a supplied `sum` with independently sampled flow windows (client and server) is
+    accepted and flagged, keeps each flow's exact window and the supplied aggregate window,
+    and has exact bytes and goodput;
+  - aligned flows and skew within tolerance are not flagged;
+  - wrong bytes, a window off the first flow and non-overlapping flows are rejected;
+  - without a `sum`, skew is still WINDOW_MISMATCH;
+  - end to end, a skewed four-stream run verifies, resolves its evidence and is not broken.
 - `TC-I-02` (`tests/integration/test_traffic_runner.py`): real mock-executable lifecycle,
   process-group ownership, connect vs execution deadline, SIGTERM->SIGKILL escalation,
   output caps with preserved prefix, idempotent wait/stop, unknown handles, single-use

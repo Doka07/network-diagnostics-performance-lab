@@ -72,7 +72,10 @@ exclusively under `finalization/`; existing seal/status files are never overwrit
 After checks, `operator-status.json` is written, then `SHA256SUMS` covers all regular files
 under the root except itself. Symlinks and special files cannot be sealed. A failed seal
 returns `sealed=false`; the returned record is authoritative and must be kept separately
-if persistence failed. A clean diagnostic denotes successful collection/finalization,
+if persistence failed. An absent `SHA256SUMS` overrides an on-disk `sealed: true`
+status, which is written before sealing is attempted. An existing seal/status causes
+finalization to return without rerunning checks; recovery belongs in a separate addendum.
+A clean diagnostic denotes successful collection/finalization,
 not necessarily successful traffic or baseline eligibility. Recovery uses a new addendum.
 
 `scripts/windows_diagnostic.py --config PATH --known-hosts PATH` is checkout-only operator
@@ -80,7 +83,8 @@ tooling for authorized one- or four-stream, 30 s Ubuntu-to-Windows pilots. It pi
 host fingerprint, checks copied helper hash/syntax and receiver identity, executes the
 normal runner with its TCP probe, then unconditionally attempts lifecycle and finalization.
 It does not replace or bypass production preflight. The current condition is explicitly
-recorded as post-SSH-restart with AC sleep/hibernation disabled. Root directories are unique.
+recorded as an operator-supplied post-SSH-restart condition with AC sleep/hibernation
+disabled, not a fresh measurement by this script. Root directories are unique.
 Power mutations and automatic retries are not provided. A four-stream run requires its
 own approved configuration and is not automatically launched after a one-stream run.
 

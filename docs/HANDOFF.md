@@ -1,5 +1,68 @@
 # Implementation handoff
 
+## 2026-10-04 — final reviews reconciled; ready for owner commit
+
+Read both canonical review files directly. Claude approves the finalizer, LR-8 lifecycle
+fields, Windows operator and parser, with no blockers. His 17 new PX cases reproduce the
+old failure and guard the supplied-versus-derived aggregation contract; tests and his
+README entry are unchanged by Codex. Claude reports 581 passing on Python 3.12.3 and
+3.14.8. Codex independently reran the full Qt-required suite on Python 3.12.3 today:
+**581 passed in 100.63 s**, no skips. Ruff check and format check pass (85 files).
+Python 3.14 was not rerun by Codex today; its latest 581 result is Claude's check.
+
+Gemini Round 12 verifies pilot arithmetic and approves the publication briefing with
+pilot labels and screenshot redactions. Codex does not adopt its stronger buffer-location,
+buffer-size/RTT or definitive timer/standby explanations: these are not established by
+the evidence. Both successful pilots remain single observations; no retained benchmark.
+
+Corrected CHATGPT_CANVA_BRIEF.md's audit attribution, commit-specific test counts and
+independent review status; added public repository/CI/source links and known limitations.
+Updated CLAIMS.md, RELEASE_CANDIDATE.md and lifecycle documentation, retaining the GUI
+guide correction. Missing SHA256SUMS overrides a sealed status; an existing finalization
+returns without rerunning checks. New maximum-skew bounds, operator injection/test seams
+and rare interruption-window hardening remain nonblocking future work; no contract or
+production code is changed for this closeout. Current power label is operator-supplied,
+not fresh telemetry. See the briefing for public claim limits.
+
+No new traffic, Windows access, raw-evidence modifications, reviewer-file edits, staging,
+commit, push or publication. Windows may remain disconnected. Owner next steps:
+execute RELEASE_CANDIDATE.md's explicit commit/push commands, confirm all four CI jobs
+for the new commit, then use the briefing in ChatGPT/Canva and approve the final visual.
+Earlier "pending review" and "564 current tests" entries below are historical.
+
+## ChatGPT/Canva handoff and final reviewer assignments — 2026-10-03
+
+Owner will compose the final post in ChatGPT/Canva. Added publication/CHATGPT_CANVA_BRIEF.md:
+self-contained project scope, exact pilot metrics, test/CI evidence, failed-run lessons,
+claim limits, visual brief, source map and GUI walkthrough. Rechecked both successful
+pilot bundles and combined-report hashes. No new traffic or Windows connection; mini-PC
+is disconnected. GUI launched on the real four-stream saved run and its rendered window
+verified; private screenshot artifacts/gui-demo-20261003.png includes local path/endpoints.
+
+Verified commit 45404309ef3965cf07f784f941259c384fdfc5d8 is now pushed, with all four jobs
+successful in GitHub Actions run 37139253231. Earlier entries describing uncommitted code
+and pending CI are historical. This new briefing/documentation is not yet committed.
+
+Parallel assignments for existing reviewer sessions (file handoff, not direct contact):
+
+- Claude: review the committed diagnostic finalizer, lifecycle timing, Windows operator
+  and reported-versus-derived interval parser logic. Write missing independent parser
+  regressions from PHASE2_CONTRACTS.md before reading the implementation; do not weaken
+  existing tests. Check CHATGPT_CANVA_BRIEF.md's software/test/CI claims. Use local raw
+  evidence read-only; do not commit private raw runs. Put separate test and review results,
+  remaining blockers or approval at the top of ../ndpl-private/CLAUDE_PLAN_REVIEW.md.
+- Gemini: independently audit the briefing's goodput arithmetic, units, per-flow RTT,
+  retransmissions, sample counts and causal limitations against summary.json/raw evidence.
+  Review the real GUI screenshot versus the synthetic gallery; recommend one Canva visual
+  with accurate pilot labels and path/address redaction. Correct remaining categorical
+  timer/buffer assertions in the canonical review. Report corrected phrasing and a clear
+  publication-claim verdict in ../ndpl-private/GEMINI_PLAN_REVIEW.md, updated in place.
+
+Both: no live traffic, Windows access, publication or production-code edits. Do not create
+new per-round review files or edit the Codex-owned briefing concurrently. Submit proposed
+briefing changes in your canonical file; Codex reconciles them. Denis approves the final
+post/visual. These assignments do not imply fresh reviewer approval has already arrived.
+
 ## One/four-stream pilots and final software checks PASSED — 2026-10-03
 
 Fresh four-stream run artifacts/windows-control-9cc2360685894c3abcb5c0c38e6f5245 passed

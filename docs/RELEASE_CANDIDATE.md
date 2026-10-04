@@ -1,107 +1,65 @@
-# Software release and receiver lifecycle follow-up
+# Software and pilot closeout
 
-The released software includes the Linux desktop inspector, saved-run HTML/JSON export, shared
-snapshot verification and runner audit corrections. It does not complete telemetry, fault, diagnostic
-rules or held-out evaluation phases. No retained performance claim is available.
+The reviewed software is committed at `45404309ef3965cf07f784f941259c384fdfc5d8`.
+[All four CI jobs passed](https://github.com/Doka07/network-diagnostics-performance-lab/actions/runs/37139253231).
+Two bounded real pilots completed with verified cleanup. Windows need not be connected
+for the remaining documentation, tests, offline viewing or CI.
 
-## Review before committing
+Claude approved the final code and added 17 independent parallel-interval regression
+cases. He reports 581 passing on each of Python 3.12.3 and 3.14.8. Gemini verified the
+pilot arithmetic and reviewed publication claims/visuals. Current validation and any
+limitations are recorded in [HANDOFF.md](HANDOFF.md).
 
-The GUI/results release is committed at `25b677a3` and its
-[GitHub Actions run passed](https://github.com/Doka07/network-diagnostics-performance-lab/actions/runs/37052132024).
-Code and methodology reviews approved that implementation with 483 tests per runtime.
-The PREVIEW-1 correction
-passes its generator assertions and all 70 results tests; independent confirmation of
-that corrected preview is now recorded by both reviewers: PREVIEW-1 is closed.
-
-The current uncommitted follow-up adds receiver lifecycle/finalization tooling, a bounded
-Windows operator, four probe regressions, 77 lifecycle/finalization tests and diagnostic
-documentation. Codex reran all 564 tests on each of Python 3.12.3 and 3.14.8 with Qt
-required: 564 passed per runtime, none skipped.
-Lint, formatting and isolated wheel/sdist build pass. Prior CI does not cover
-these uncommitted additions. After owner-disabled AC sleep and SSH restart, clean one-
-and four-stream pilots completed; see [hardware diagnostics](HARDWARE_DIAGNOSTICS.md).
-Receiver flags and probe remain unchanged. A supplied-aggregate parser correction retains
-actual per-flow windows and flags differences. New operator/parser code has development
-validation; fresh independent approval is not yet recorded.
-
-Follow-up closeout order:
-
-1. Completed: Claude and Gemini approved the corrected [results preview](mockups/results.html),
-   including the explicit synthetic banner and preserved fixture labels.
-2. Denis reviews the lifecycle follow-up and executes the commit/push commands below.
-3. All four CI jobs pass for that new commit.
-4. Denis approves the [LinkedIn draft](../publication/LINKEDIN_POST.md) and chosen
-   screenshot before publication. Keep the synthetic-data banner visible.
-
-This closes the offline software milestone, not the complete experimental roadmap.
-
-Read the current [handoff](HANDOFF.md) for reviewer verdicts and remaining gates. Open
-[the synthetic preview gallery](mockups/index.html) or launch the actual application:
-
-```bash
-cd ~/Desktop/network-diagnostics-performance-lab
-.venv/bin/diaglab-gui
-```
-
-The [viewer guide](GUI_GUIDE.md) covers installation, statuses and evidence links.
-The lifecycle follow-up is uncommitted; commands below are for Denis. Codex has not
-staged, committed or pushed it. The existing GUI/results release is already published
-to the repository; the LinkedIn draft has not been posted.
+The remaining candidate consists of Claude's new tests/catalog entry and reconciled
+documentation. Production code and raw evidence are unchanged. The owner alone commits,
+pushes and publishes. No files have been staged by Codex.
 
 ## Owner commit and push
 
-Review the changes, including newly added source, tests and screenshots:
+Run from the project directory. Explicit paths exclude raw runs and private reviews:
 
 ```bash
+cd ~/Desktop/network-diagnostics-performance-lab
 git status --short
-git diff --stat
 git diff --check
-git diff
-```
-
-After acceptance, stage the specific public project paths. Private canonical reviews and
-measurement artifacts are private (outside the repository or in ignored `artifacts/`)
-and are not included:
-
-```bash
-git add scripts/receiver_lifecycle.py scripts/windows_receiver.ps1
-git add scripts/diagnostic_finalize.py scripts/windows_diagnostic.py
-git add diaglab/traffic/parser.py docs/PHASE2_CONTRACTS.md
-git add README.md
-git add tests/lifecycle tests/integration/test_probe_server.py tests/README.md
-git add docs/RECEIVER_LIFECYCLE.md docs/HARDWARE_DIAGNOSTICS.md
-git add docs/DECISIONS.md docs/HANDOFF.md docs/REVIEW_LOG.md docs/RELEASE_CANDIDATE.md
-git add docs/MASTER_PLAN.md
-git add publication/CLAIMS.md publication/LINKEDIN_POST.md
+git add tests/unit/test_parallel_intervals.py tests/README.md
+git add publication/CHATGPT_CANVA_BRIEF.md publication/CLAIMS.md
+git add docs/GUI_GUIDE.md docs/RECEIVER_LIFECYCLE.md
+git add docs/HANDOFF.md docs/REVIEW_LOG.md docs/RELEASE_CANDIDATE.md
 git diff --cached --check
 git diff --cached --stat
-git diff --cached --name-only
+git diff --cached
 ```
 
-Inspect the staged file list and diff, then:
+After reviewing the staged changes:
 
 ```bash
-git commit -m "Add diagnostic finalization and fix parallel iperf interval parsing"
+git commit -m "Add independent parallel-interval regressions and publication briefing"
 git push origin main
 ```
 
 ## Remote verification
 
-On [GitHub Actions](https://github.com/Doka07/network-diagnostics-performance-lab/actions),
-open **Python validation** for the newly pushed commit. All four jobs must succeed:
+Open [GitHub Actions](https://github.com/Doka07/network-diagnostics-performance-lab/actions)
+and select **Python validation** for your new commit. All four jobs must pass:
 
-- `offline-checks (3.12)` and `offline-checks (3.14)`: core installation, lint, formatting,
-  configuration validation, independent tests and package build.
-- `gui-checks (3.12)` and `gui-checks (3.14)`: GUI extras, offscreen Qt tests with
-  `NDPL_REQUIRE_GUI=1` so missing Qt cannot silently skip the GUI checks.
+- offline-checks (3.12)
+- offline-checks (3.14)
+- gui-checks (3.12)
+- gui-checks (3.14)
 
-Optional Qt tests may skip only in the core-only jobs. A green older commit does not
-validate this candidate. Local passing tests do not replace remote CI or owner acceptance.
+The GUI jobs require Qt and run inspection tests; offline jobs run the core suite and
+build packages, with GUI checks allowed to skip when Qt is absent. Do not describe each
+CI job as running all 581 tests. Green CI on an older commit does not cover new tests.
 
-## Next project milestone
+## ChatGPT and Canva
 
-The bounded one/four-stream pilots have completed with verified cleanup. Confirm remaining
-inventory/topology notes and plan the retained baseline separately; do not publish pilot
-numbers as a validated benchmark or assert a single proven cause for the earlier stalls.
-Collectors, fault injection and automatic diagnosis follow their separate reviewed contracts
-and phase gates; the offline viewer's success does not authorize those experiments.
+Upload [CHATGPT_CANVA_BRIEF.md](../publication/CHATGPT_CANVA_BRIEF.md) to ChatGPT. It
+contains the prompt, exact results, source links, limitations and visual guidance.
+Use a real screenshot labelled as pilot data; redact local paths and endpoints without
+hiding flags/status. Synthetic mockups retain their synthetic labels. Denis decides the
+final text and visual and publishes himself.
+
+This completes the software-and-bounded-pilot milestone, not the entire experimental
+roadmap. Retained campaigns, telemetry, fault injection and automated diagnosis are
+future work with separate contracts and experiment approvals.
